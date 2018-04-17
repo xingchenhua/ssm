@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.IBuildingTypeMapper">
+
+	<resultMap id="BuildingTypeResultMap" type="BuildingType" >
+		<id property="no" column="TYPENO" />
+		<result property="name" column="TYPENAME"/>
+	</resultMap>
+	
+	<resultMap id="BuildingTypeWithCollectionResultMap" type="BuildingType" extends="BuildingTypeResultMap" >
+		<collection property="buildings" column="TYPENO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByBuildingType"></collection>
+	</resultMap>
+	
+	<insert id="insert" parameterType="BuildingType">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_BuildingType.nextval from dual
+		</selectKey>
+		INSERT INTO BuildingType(TYPENO,TYPENAME) 
+		VALUES(#{no},#{name})
+	</insert>
+	
+	<update id="update" parameterType="BuildingType">
+		update BuildingType set TYPENAME=#{name}
+		where TYPENO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="BuildingType">
+		delete from BuildingType where TYPENO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="BuildingTypeWithCollectionResultMap">
+		select * from BuildingType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="BuildingTypeResultMap">
+		select * from BuildingType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="BuildingTypeResultMap">
+		select * from BuildingType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(TYPENO) from BuildingType
+	</select>
+	
+	
+	
+
+
+</mapper>
+

@@ -1,0 +1,96 @@
+﻿
+【】Bootstrap3 Dialog
+1.取得Bootstrap3 Dialog
+(1)引入CSS： bootstrap-dialog.min.css
+<!-- 引入Bootstrap Dialog -->
+    <link href="otherplugin/bootstrapdialog/css/bootstrap-dialog.min.css" rel="stylesheet">
+
+(2)引入框架的JS：bootstrap-dialog.min.js
+<script src="otherplugin/bootstrapdialog/js/bootstrap-dialog.min.js"></script>
+
+2.常用的弹出框
+
+(1)alert
+BootstrapDialog.alert('I want banana!');
+有回调函数的Alert框：
+ BootstrapDialog.alert('Hi Apple!', function(){
+            alert('Hi Orange!');
+ });
+
+
+
+(2)确认框
+
+ BootstrapDialog.confirm('Hi Apple, are you sure?');
+
+Confirm with callback取得确认选项：
+
+BootstrapDialog.confirm('Hi Apple, are you sure?', function(result){
+            if(result) {
+                alert('Yup.');
+            }else {
+                alert('Nope.');
+            }
+        });
+
+
+（3）显示框
+ BootstrapDialog.show({
+            message: 'Hi Apple!'
+ });
+有Title的显示框：
+ BootstrapDialog.show({
+            title: 'Say-hello dialog',
+            message: 'Hi Apple!'
+ });
+
+（4）定制弹出框的按钮：
+BootstrapDialog.show({
+            title: 'Default Title',
+            message: 'Click buttons below.',
+            buttons: [{
+                label: 'Title 1',
+                action: function(dialog) {
+                    dialog.setTitle('Title 1');
+                }
+            }, {
+                label: 'Title 2',
+                action: function(dialog) {
+                    dialog.setTitle('Title 2');
+                }
+            }]
+ });
+
+
+（5）动态更改弹出框的message
+BootstrapDialog.show({
+            title: 'Default Title',
+            message: 'Click buttons below.',
+            buttons: [{
+                label: 'Message 1',
+                action: function(dialog) {
+                    dialog.setMessage('Message 1');
+                }
+            }, {
+                label: 'Message 2',
+                action: function(dialog) {
+                    dialog.setMessage('Message 2');
+                }
+            }]
+  });
+
+
+
+
+
+
+
+(6)
+
+
+
+
+(7)
+
+
+

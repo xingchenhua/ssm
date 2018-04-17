@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.IServiceTypeMapper">
+
+	<resultMap id="ServiceTypeResultMap" type="ServiceType" >
+		<id property="no" column="TYPENO" />
+		<result property="name" column="TYPENAME"/>
+	</resultMap>
+	
+		
+	<insert id="insert" parameterType="ServiceType">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_ServiceType.nextval from dual
+		</selectKey>
+		INSERT INTO ServiceType(TYPENO,TYPENAME) 
+		VALUES(#{no},#{name})
+	</insert>
+	
+	<update id="update" parameterType="ServiceType">
+		update ServiceType set TYPENAME=#{name}
+		where TYPENO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="ServiceType">
+		delete from ServiceType where TYPENO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="ServiceTypeResultMap">
+		select * from ServiceType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="ServiceTypeResultMap">
+		select * from ServiceType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="ServiceTypeResultMap">
+		select * from ServiceType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(TYPENO) from ServiceType
+	</select>
+	
+	
+	
+
+
+</mapper>
+

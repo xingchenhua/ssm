@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.ICustomerMapper">
+	<!-- 房间的简单属性映射 -->
+	<resultMap id="CustomerResultMap" type="Customer" >
+		<id property="no" column="CUSTOMERNO" />
+		<result property="code" column="CCODE"/>
+		<result property="name" column="CNAME"/>
+		<result property="contact" column="CONTACT"/>
+		<result property="card" column="CARDCODE"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="tel" column="TEL"/>
+		<result property="fax" column="FAX"/>
+		<result property="qq" column="QQ"/>
+		<result property="weixin" column="WEIXIN"/>
+		<result property="feeStartDate" column="FEESTARTDATE"/>
+		<result property="feeEndDate" column="FEEENDDATE"/>
+		<result property="status" column="CSTATUS"/>
+	</resultMap>
+	
+	<!-- 客户的关联属性映射 -->
+	<resultMap id="CustomerWithAssociationResultMap" type="Customer" extends="CustomerResultMap" >
+		<association property="customerType" column="TYPENO" select="com.neusoft.wuye.baseinfo.mapper.ICustomerTypeMapper.select"></association>
+	</resultMap>
+		
+	<insert id="insert" parameterType="Customer">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Customer.nextval from dual
+		</selectKey>
+		INSERT INTO CUSTOMER(CUSTOMERNO,TYPENO,CCODE,CNAME,CONTACT,CARDCODE,MOBILE,TEL,FAX,QQ,WEIXIN,FEESTARTDATE,FEEENDDATE,CSTATUS) 
+		VALUES(#{no},#{customerType.no},#{code},#{name},#{contact},#{card},#{mobile},#{tel},#{fax},#{qq},#{weixin},#{feeStartDate},#{feeEndDate},'N')
+	</insert>
+	
+	<update id="update" parameterType="Customer">
+		update CUSTOMER set CCODE=#{code},CNAME=#{name},CONTACT=#{contact},
+		CARDCODE=#{card},MOBILE=#{mobile},TEL=#{tel},FAX=#{fax},QQ=#{qq},WEIXIN=#{weixin}
+		,FEESTARTDATE=#{feeStartDate},FEEENDDATE=#{feeEndDate},CSTATUS=#{status}		
+		where CUSTOMERNO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Customer">
+		delete from CUSTOMER where CUSTOMERNO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="CustomerWithAssociationResultMap">
+		select * from CUSTOMER where CUSTOMERNO=#{roomNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="CustomerResultMap">
+		select * from CUSTOMER
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="CustomerResultMap">
+		select * from CUSTOMER
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(AREANO) from CUSTOMER
+	</select>
+	<!-- 根据检索条件取得Room列表，无分页 -->
+	<select id="selectListByCondition" resultMap="CustomerResultMap">
+	
+	</select>
+	<!-- 根据检索条件取得Room列表，有分页 -->
+	<select id="selectListByConditionWithPage">
+	
+	</select>
+	<!-- 根据检索条件取得Room个数 -->
+	<select id="selectCountByCondition">
+	
+	</select>
+	
+	
+	
+
+
+</mapper>
+

@@ -1,0 +1,57 @@
+<script type="text/javascript" src="car/main.js"></script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+	      <div class="col-md-6">校车信息</div>
+	      <div class="col-md-6 text-right"  >
+	        <a href="#" id="carAddLink" class="btn btn-default">增加</a>
+	        <a href="#" id="carModifyLink" class="btn btn-default">修改</a>
+	        <a href="#" id="carDeleteLink" class="btn btn-default">删除</a>
+	        <a href="#" id="carViewLink" class="btn btn-default">查看</a>
+	        <a href="#" id="carImportLink" class="btn btn-default">导入</a>
+	      </div>
+      </div>
+    </div>
+    <div class="panel-body">
+        <form class="form-inline" role="form">
+		  <div class="form-group">
+		    <label  for="name">小区</label>
+		    <select id="areaSelect" class="form-control">
+		       <option value="0">所有小区</option>
+		    </select>
+		  </div>
+		  <div class="form-group">
+		    <label  for="name">建筑类型</label>
+		    <select id="buildingTypeSelect" class="form-control">
+		       <option value="0">所有建筑类型</option>
+		    </select>
+		  </div>
+		  <div class="form-group">
+		    <label  for="name">校车编码</label>
+		    <input type="text" class="form-control" name="carcode" size="5" />
+		  </div>
+		  
+		</form>
+
+        <table id="carGrid"></table>
+  		<div id="carGridPager"></div>
+    </div>
+  
+</div>
+
+
+
+
+<div class="modal" id="carModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="modelbody">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>

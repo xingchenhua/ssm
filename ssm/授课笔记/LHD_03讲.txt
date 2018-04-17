@@ -1,0 +1,147 @@
+﻿第03讲 MyBatis关联映射
+
+【】Java对象关联关系
+1.关联关系表达的意义：has关系，拥有的关系。
+2.Java的关联关系表达：定义对象属性。
+class A {}
+
+
+class B{
+   private A a=null;
+
+}
+3.关联关系的特性：
+(1)数量性：一个，多个(固定，可变)
+B有一个A：
+class B{
+   private A a=null;
+
+}
+B有3个A：
+class B{
+   private A[] as=new A[3];
+}
+
+B有多个A：
+class B{
+   private List<A> as=null;
+}
+
+
+(2)方向性：单向关联和双向关联
+<1>单向对一关联
+class A { 
+}
+class B{
+   private A a=null;
+
+}
+<2>双向一对一关联
+class A { 
+  private B b=null;
+}
+class B{
+   private A a=null;
+
+}
+<2>双向一对多， 多对一关联
+class A { 
+  private B b=null;
+}
+class B{
+   private List<A> as=null;
+
+}
+<3>双向多对多
+class A { 
+  private List<B> bs=null;
+}
+class B{
+   private List<A> as=null;
+
+}
+
+【】数据库表达关联关系：
+1.一对一关联关系：
+<1> PK同时是FK
+<2> 单独FK，FK要求唯一性约束。
+
+2.一对多/多对一关联关系
+FK->PK
+FK允许重复。
+
+有FK的表是多方（从方），
+PK的表是一方（主方）。
+3.多对多关联关系表达：
+使用一个中间关联表。
+中间表各取关联2个表的PK字段，联合做主键，
+每个PK字段是指向各种表的FK。
+
+【】MyBatis表达对一的映射
+1.映射对一的标记：
+<association property="address" column="addr_id"
+select="findAddressById"/>
+2.映射对一原则：
+关联映射有单独的ResultMap。
+
+
+
+3.取得关联的对一对象的方式：
+(1)内嵌式Select方式
+（One-to-one mapping using nested Select）
+<association property="address" column="addr_id"
+select="findAddressById"/>
+
+
+优点：编写简单
+缺点：性能差，需要执行多条查询语句。
+
+
+(2)内嵌式resultMap
+(One-to-one mapping using nested ResultMap)
+<resultMap type="Student" id="StudentWithAddressResult">
+<id property="studId" column="stud_id"/>
+<result property="name" column="name"/>
+<result property="email" column="email"/>
+<association property="address" resultMap="AddressResult"/>
+</resultMap>
+
+优点：性能好，执行一个关联查询即可。
+缺点：重新写select语句。
+
+【】MyBatis表达对多的映射
+1.映射对多的标记：
+<collection property="buildings" javaType="java.util.ArrayList" 
+ofType="building" column="PK字段"
+select="select"/>
+2.映射对多原则：
+关联映射有单独的ResultMap。
+
+3.取得关联的对多对象的方式：
+(1)内嵌式Select方式
+（One-to-one mapping using nested Select）
+<collection property="address" column="addr_id"
+select="select映射ID"/>
+
+案例：
+<resultMap id="AreaWithCollectionResultMap" type="Area" extends="AreaResultMap" >
+  <collection property="buildings" column="AREANO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByArea"></collection>
+</resultMap>
+
+
+优点：编写简单
+缺点：性能差，需要执行多条查询语句。
+
+(2)内嵌式resultMap
+(One-to-one mapping using nested ResultMap)
+<resultMap type="Student" id="StudentWithAddressResult">
+<collection property="address" resultMap="ResultMap"/>
+</resultMap>
+案例：
+
+
+
+
+
+
+

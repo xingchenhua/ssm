@@ -1,0 +1,44 @@
+
+--jquery
+http://jquery.com/
+
+-- jqueryUI
+http://jqueryui.com/
+
+-- Bootstrap
+https://getbootstrap.com/
+
+--bootstrap3-dialog
+https://github.com/nakupanda/bootstrap3-dialog
+
+--jQgrid
+
+新版的javaScript编程的文档网址
+http://www.guriddo.net/documentation/guriddo/javascript/
+jqGrid主页网址
+http://www.trirand.com/blog/
+Demo网址
+http://www.trirand.com/blog/?page_id=5
+下载网址
+http://www.trirand.com/blog/?page_id=6  
+较为详细的文档网址：
+http://www.trirand.com/jqgridwiki/doku.php?id=wiki:jqgriddocs
+
+
+--jquery form
+http://malsup.com/jquery/form/
+
+-- jquery validate
+https://jqueryvalidation.org/
+
+-- poi
+https://poi.apache.org/
+
+-- iText
+
+
+--Baidu EChart官网
+http://echarts.baidu.com/
+目前最好用的图表显示框架
+
+-- 

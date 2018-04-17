@@ -1,0 +1,177 @@
+﻿第10讲 jqGrid和jquery form
+
+【】概念
+jqGrid is an Ajax-enabled JavaScript control that 
+provides solutions for representing and manipulating 
+tabular data on the web
+
+【】jqGrid的Options
+ jQuery("#grid_id").jqGrid(options);
+
+$("#grid_id").jqGrid(options);
+
+options是JavaScript对象：
+使用方式1：
+var options={
+  url:"",
+  colModel:[]
+ 
+};
+
+$("#grid_id").jqGrid(options);
+使用方式2：
+$("#grid_id").jqGrid({
+  url:"",
+  ....
+});
+常用的选项：
+url:'/jqGridModel?model=Wine',
+指定请求地址，返回JSON数据。      
+datatype: "json",
+指定接收数据的类型。
+mtype: 'GET',
+指定请求的方式。 GET,POST,PUT,DELETE.
+
+colNames:['id', 'Provider', 'Name', 'Year', 'Description', 'Type', 'Geographical Region', 'Creation Date', 'Edit Date'],
+表头列的标题：
+colModel:[
+                {name:'id',index:'id', width:55, sortable:false, editable:false, editoptions:{readonly:true,size:10}},
+                {name:'provider',index:'provider', width:200,editable:false},
+                {name:'name',index:'name', width:200,editable:true},
+                {name:'year',index:'year', width:100,editable:true},
+                {name:'description',index:'description', width:300,editable:true},
+                {name:'type',index:'type', width:200,editable:true,edittype:'select',editoptions:{dataUrl: '/jqGridOptionData?entity=WineType'}},
+                {name:'geographical_region',index:'geographical_region', width:200,editable:true},
+                {name:'creationDate',index:'creationDate', width:100},
+                {name:'editDate',index:'editDate', width:100},
+           ],
+指定列的显示的字段的名称，宽度，格式等等
+jsonReader : {
+	root:"list",
+	page:"page",
+	total:"pageCount",
+	records:"count",
+	id:"no"
+        repeatitems:false
+     },
+解析JSON数据。
+rowNum:10,
+指定每页显示的个数。jQGrid每次请求发送rows=rowNum和page=当前页
+rowList:[10,20,30],
+指定页数的选项。
+pager: jQuery('#gridpager'),
+指定分页导航显示的区域。
+sortname: 'name',
+指定排序的字段。
+viewrecords: true,
+是否显示总个数。
+sortorder: "asc",
+排序的顺序：asc，desc
+caption:"Wines",
+表格的标题。
+editurl:"/jqGridModel?model=Wine",
+
+
+autowidth:true,
+自动宽度。扩展到父容器的宽度。
+
+width：800
+
+height:高度。
+
+multiselect:true|false
+是否允许多选。
+
+postData:{name1:value,name2:value}
+指定发送其他的数据。
+
+
+
+【】jqGrid的Methods(方法)
+对jqGrid表格进行操作，常见方法包括传递动态数据，更新表格。
+1.方法的语法：
+(1)旧版本的语法：
+$("#grid_id").jqGridMethod( parameter1,...parameterN );
+jqGridMethod:指定方法的名称。
+
+案例：
+jQuery("#grid_id").setGridParam({areaNo:areaNo}).hideCol("somecol").trigger("reloadGrid");
+
+(2) new API语法：
+jQuery("#grid_id").jqGrid('method', parameter1,...parameterN );
+$("#grid_id").jqGrid('method', parameter1,...parameterN );
+
+案例：
+jQuery("#grid_id").jqGrid('setGridParam',{...}).jqGrid('hideCol',"somecol").trigger("reloadGrid");
+
+
+2.常见的方法：
+(1)setGridParam:
+发送动态参数：
+jQuery("#grid_id").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:2}})
+(2)trigger
+重新请求，更新数据。
+Query("#grid_id").trigger("reloadGrid");
+(3)getCell
+取得单元格的数据。传递2个参数：rowid, iCol
+
+jQuery("#grid_id").jqGrid('getCell',{rowsid:1,iCol:2})
+
+(3)getCol
+取得列的数据，返回数组。
+
+(4)setCaption
+设置表格的标题
+jQuery("#grid_id").jqGrid('setCaption',"小区列表");
+
+
+【】jqGrid的Events
+对表格进行操作时触发的动作。称为事件event.
+1.语法：
+jQuery("#grid_id").onEvent(function(){});
+
+
+2主要的事件：
+(1) onSelectRow:
+    选择表格行的时候触发。
+var lastSel;
+jQuery("#gridid").jqGrid({
+...
+   onSelectRow: function(id){ 
+      if(id && id!==lastSel){ 
+         jQuery('#gridid').restoreRow(lastSel); 
+         lastSel=id; 
+      } 
+      jQuery('#gridid').editRow(id, true); 
+   },
+...
+});
+
+（2）loadComplete：
+当请求数据载入表格后触发。
+
+loadComplete:function(){
+  处理代码。
+}
+
+【】ColModel的属性（Options）
+
+
+
+【】jquery form框架(插件)
+1.功能：拦截表单提交。
+
+2.引入：
+ <script src="js/jquery.form.js"></script>
+
+
+
+
+
+【】jquery form框架
+
+
+
+
+
+

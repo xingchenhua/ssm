@@ -1,0 +1,199 @@
+﻿第06讲 SPA应用开发
+
+【】SPA应用的原理
+1.SPA-Single Page Application
+2.应用有一个主页面，其他的页面使用路由技术
+  动态嵌入到主页面的一个区域（div）.
+3. SPA核心技术是AJAX。
+
+【】常用的SPA应用开发技术
+1.jQuery技术：包括各种插件框架。
+2.Google Angular (4.x)
+3.Facebook React.
+4.Vue.js
+
+【】SPA应用
+1.编写主页。
+2.编写各种模块的页面。
+3.使用jquery load函数嵌入模块的页面到主区域。
+
+
+【】jquery基础
+1.jquery概念：jquery是JavaScript的函数库。
+2.jquery功能：
+(1)操作HTML页面元素。
+(2)提供常用的函数。
+(3)封装AJAX操作。
+3.语法：
+(1) $(选择器).函数(参数);
+   先选中要操作的页面元素，函数是对元素的操作。
+
+(2)$.函数(参数);
+   通用函数，不操作页面元素，提供常用的函数。
+   $.getJSON()
+   $.each()
+   $.post()
+   $.get()
+   $.ajax()
+
+【】jquery选择器
+功能：选中页面的元素。
+语法：使用CSS选择器。
+1.ID选择器：
+<div id="maincontent">
+
+</div>
+$("#maincontent").html("你好");
+
+
+2.整个文档选择器
+function a(){
+}
+$(document).ready(a);
+
+
+3.类选择器：
+<div class="c1 c2">
+</div>
+
+$(".c1").html("Hello");
+$(".c2").html("Hello");
+
+4.标记选择器
+
+$("div").html("你好");
+
+
+5.属性选择器：
+<a href="add">增加</a>
+<a href="modify">修改</a>
+<input type="text" name="areaName" />
+
+$("a[href='add']").on("click",function(){
+});
+
+var name=$("input[name='areaName']").val();
+$("input[name='areaName']").val("小区");
+
+
+
+
+6.组合选择器：
+(1)标记+ID
+$("div#maincontent").html("你好");
+(2)标记+class选择器
+$("div.c1").html("你好");
+
+7.子选择器：
+使用空格表达每个子元素。
+$("div#menu ul li a").函数();
+
+8.平行选择器：
+$("div#menu,ul,li,a").函数();
+
+
+9.jquery提供的特殊选择器：
+(1)当前元素选择器：用于事件处理中，取得发生事件的当前对象
+$(this).函数();
+(2)整个载入页面的选择器：
+$(document).ready(处理函数);
+
+
+【】jquery对页面元素操作的主要函数
+1.html(), text()： 读、写元素的内容。
+
+$(选择器).html()
+$(选择器).html(参数)
+$(选择器).text()
+$(选择器).text(参数)
+
+
+
+
+2.css函数：读/写元素的CSS样式。
+(1)语法：
+$(选择器).css("属性名"); 取得元素的CSS样式的属性值。
+$(选择器).css("属性名","属性值")：设定元素的CSS样式值。
+(2)案例：
+
+$("div#maincontent").css("background-color","#CCC");
+$("div#maincontent").css("height","500px");
+
+
+3.on()函数：为元素设定事件处理。
+(1)语法：$(选择器).on("事件名",函数);
+(2)常用的事件：click,change,blur focus, keyin keyout
+(3)案例：
+旧版本jquery：
+$("选择器").onclick(function(){});
+新版jquery推荐使用on函数：
+$("ul.nav-second-level li a").on("click",function(event){
+	var href=$(this).attr("href");
+	if(href!="#"){
+		$("div#maincontent").load(href);
+	}
+	event.preventDefault();
+});
+
+
+4.attr(): 读/写元素的属性值。
+(1)语法：
+读取指定的属性的值：$(选择器).attr("属性名");
+写元素的属性值：$(选择器).attr("属性名","值");
+(2)案例：
+var href=$(this).attr("href");
+
+$("input[type='radio'][value='男']").attr("checked","true");
+
+
+5.val()函数：
+(1)功能：读取/写入表单元素的值。
+(2)语法：
+$(选择器).val();取得表单元素的输入值。
+$(选择器).val(值);  设置表单元素的值。
+(3)案例：
+  var typeName=$("input[name='typeName']").val();
+
+  $("input[name='typeName']").val(data.typeName);
+
+【】jQuery与服务器通讯的函数
+1. load函数：
+(1)功能：载入server端的页面到指定的区域。
+(2)语法：
+$(选择器).load(uri,传递的参数对象,函数 );
+uri：指定嵌入页面的地址。
+参数：是JavaScript对象。
+
+JavaScript对象格式：
+{属性:值,
+ 属性:值,
+}
+函数:回调函数（callback）异步调用。
+     当load页面到浏览器内存中后执行。
+(3)案例：
+$("div#maincontent").load(href);
+
+2.$.get()函数
+(1)功能:发送GET请求。
+(2)语法：
+$.get(uri,参数对象,函数);
+参数对象格式：{属性:值,属性:值,....}
+函数:function(data){} 函数的参数用于取得服务器返回的数据。
+
+
+(3)案例：
+$.get("buildingtype/list/page.mvc",{rows:rows,page:page},function(typeList){
+	if(typeList!=null&&typeList.length>0){
+		for(var i=0;i<typeList.length;i++){
+			$("table#buildingTypeTable tbody").append("<tr><td>"+typeList[i].no+"</td><td>"+typeList[i].name+"</td></tr>");
+		}
+	}
+});
+
+
+
+
+
+
+
+

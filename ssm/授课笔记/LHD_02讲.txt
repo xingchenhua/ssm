@@ -1,0 +1,177 @@
+﻿第02讲 JavaEE 5层架构开发
+
+【】DTO层开发（Model类）
+1.Model类表达业务对象。
+2.Model只表达业务对象的属性。
+3.原则：项目中每个业务对象对应一个Model类。
+   一个表对应一个Model类。
+4.编程：
+(1)包命名：域名.项目名.模块名.model
+案例：com.neusoft.ebm.baseinfo.model
+(2)类命名：业务对象名+Model
+案例：ProductCategoryModel
+      ProductModel
+      OrderModel
+(3)属性定义：
+    根据对应表的字段进行属性定义。每个字段一个属性。
+    属性变量名称符合JavaBean规范，前2个字符必须小写。
+    属性要求是private
+
+(4)方法定义：
+   每个属性一对set/get方法。
+
+
+【】DAO层开发（持久层）
+使用MyBatis
+1.配置连接数据库的信息。
+(1)使用MyBatis的专门的配置文件:
+   mybaits-config.xml
+(2)*在Spring的IoC配置文件中配置数据源。
+使用C3P0连接池框架配置数据源
+<!-- 使用C3P0连接池框架 配置数据源  -->
+<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	<property name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+	<property name="jdbcUrl" value="jdbc:oracle:thin:@10.1.53.89:1521:oracle"/>
+	<property name="user" value="lhd"/>
+	<property name="password" value="lhd"/>
+</bean>
+
+2.定义获取SqlSessionFactory。
+(1)定义一个SqlSessionFactory的工厂类。
+
+(2)在Spring IOC容器中配置SqlSessionFactory的工厂类
+SqlSessionFactoryBean
+
+<!-- 配置Spring管理SqlSessionFactory对象 -->
+<bean id="sqlSessionFactory"  class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="typeAliasesPackage" value="com.neusoft.ebm.baseinfo.model,com.neusoft.ebm.order.model"></property>
+	<property name="mapperLocations" value="classpath:com/neusoft/ebm/*/mapper/xml/*.xml"></property>
+				
+</bean>
+
+
+
+3.定义获取SqlSession。
+(1)手动编程方式：工厂类里再定义一个openSession().
+(2)配置方式：在Spring IOC容器中配置获得SqlSession，使用
+   SqlSessionTemplate类。
+<!-- 获取SqlSession对象 -->
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg index="0" ref="sqlSessionFactory" />
+</bean>
+
+
+4.定义Mapper接口：
+(1)原则：一个MOdel类对应一个Mapper接口。
+(2)包命名：域名.项目名.模块名.mapper
+案例：com.neusoft.ebm.baseinfo.mapper
+(3)接口的命名：I+业务对象名+Mapper
+  案例:IProductCategoryMapper
+       IProductMapper 
+(4)Mapper接口的方法：
+   insert,update,delete, 各种select。
+
+
+5.定义Mapper接口的XML映射文件：
+(1)XML文件的存储：
+域名.项目名.模块名.mapper.xml
+(2)XML文件命名： 业务对象名Mapper.xml
+
+
+6.配置取得Mapper接口：
+<!-- 获得Mapper接口对象, 配置扫描Mapper接口父包的方式  ,新版Spring-MyBatis模式-->
+<mybatis:scan base-package="com.neusoft.ebm.baseinfo.mapper" />
+
+
+【】Service编程
+职责：模拟对业务对象的处理方法。
+
+1.Service接口：
+(1)包名：域名.项目名.模块名.service
+案例：com.neusoft.ebm.baseinfo.service
+(2)接口的命名：I+业务对象名+Service
+案例：IProductCategoryService
+(3)方法：根据业务需求分析获得。
+
+案例：
+package com.neusoft.ebm.baseinfo.service;
+
+import com.neusoft.ebm.baseinfo.model.ProductCategoryModel;
+//产品类别的业务接口
+public interface IProductCategoryService {
+
+	public void add(ProductCategoryModel pcm) throws Exception;
+	
+	public void modify(ProductCategoryModel pcm) throws Exception;
+	
+	public void delete(ProductCategoryModel pcm) throws Exception;
+	
+}
+
+
+2.Service实现类
+
+(1)包名：域名.项目名.模块名.service.impl
+案例：com.neusoft.ebm.baseinfo.service.xml
+(2)类的命名：业务对象名+ServiceImpl
+案例：ProductCategoryServiceImpl
+(3)方法：
+《1》实现接口的所有方法。
+《2》注入的DAO层对象方法
+package com.neusoft.ebm.baseinfo.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.neusoft.ebm.baseinfo.mapper.IProductCategoryMapper;
+import com.neusoft.ebm.baseinfo.model.ProductCategoryModel;
+import com.neusoft.ebm.baseinfo.service.IProductCategoryService;
+
+//产品类型业务实现类
+@Service("ProductCategoryService")
+@Transactional
+public class ProductCategoryServiceImpl implements IProductCategoryService {
+
+	private IProductCategoryMapper pcmp=null;
+	@Autowired
+	public void setPcmp(IProductCategoryMapper pcmp) {
+		this.pcmp = pcmp;
+	}
+
+	public void add(ProductCategoryModel pcm) throws Exception {
+		pcmp.insert(pcm);
+
+	}
+
+	public void modify(ProductCategoryModel pcm) throws Exception {
+		pcmp.update(pcm);
+
+	}
+
+	public void delete(ProductCategoryModel pcm) throws Exception {
+		pcmp.delete(pcm);
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+【】

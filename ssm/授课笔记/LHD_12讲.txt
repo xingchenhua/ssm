@@ -1,0 +1,337 @@
+﻿第12讲 Spring MVC实现文件上传和下载
+
+【】上传文件的处理方式：
+1.保存到指定的目录中。
+2.保存在数据库的指定字段中。
+3.直接处理上传文件，取得文件中数据，最后将上传文件删除。
+
+
+【】文件上传的表单编程
+
+<form action="add.mvc" method="post" enctype="multipart/form-data" >
+
+附件:<input type="file" name="photo"  />
+
+</form>
+
+
+【】Spring MVC实现文件上传
+1.处理方式：
+(1)使用Apache Commons FileUpload component
+当使用Sevlet3.0之前的JavaEE服务器。
+
+(2)使用Sevlet3.0以后的JavaEE服务器，
+   可以直接使用内置的文件上传机制。
+
+
+【】使用Sevlet3.0之前的JavaEE服务器
+Apache Commons FileUpload的安装与配置
+1.下载Apache Commons FileUpload。
+
+2.将FileUpload的JAR文件copy到classpath lib下。
+
+
+
+3.在Spring MVC的IoC配置文件中配置common upload的上传解析器：
+
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.
+CommonsMultipartResolver">
+<property name="maxUploadSize" value="2000000"/>
+</bean>
+
+
+【】使用Sevlet3.0之后的JavaEE服务器
+Servlet3.0已经内置文件上传机制，不再需要引入外部的
+文件上传框架。
+1.配置Sevlet3.0的文件上传解析器。
+<bean id="multipartResolver"
+class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+</bean>
+
+
+2.在web.xml的Spring核心Servlet中启用标准的文件上传解析器。
+
+
+<servlet>
+<servlet-name>springmvc</servlet-name>
+<servlet-class>
+org.springframework.web.servlet.DispatcherServlet
+</servlet-class>
+<init-param>
+<param-name>contextConfigLocation</param-name>
+<param-value>
+/WEB-INF/config/springmvc-config.xml
+</param-value>
+</init-param>
+<multipart-config>
+<max-file-size>20848820</max-file-size>
+<max-request-size>418018841</max-request-size>
+<file-size-threshold>1048576</file-size-threshold>
+</multipart-config>
+</servlet>
+
+
+
+【】Spring MVC实现文件上传处理
+1.Spring MVC提供了接收文件上传的接口：
+  MultipartFile
+
+2.MultipartFile的常用方法：
+Method Description
+（1）getBytes： Returns the file content as a byte array.
+（2）getContentType： Returns the content type of the file.
+（3）getInputStream： Returns the file content as an InputStream.
+（4）getName： Returns the name of the parameter in the multipart form.
+（5）getOriginalFilename： Returns the original file name in the client’s local drive.
+（6）getSize： Returns the file size in bytes as a long.
+（7）isEmpty： Indicates whether or not the uploaded file is empty.
+（7）tranferTo： Saves the uploaded file as a java.io.File
+
+3.粗粒度接收：
+  将MultipartFile类型的接收文件，作为Model类的属性。
+class AreaModel{
+  private MultipartFile photo=null;
+  
+}
+实际编程中，文件保存到数据库，一般与持久层映射要求相符。
+Hibernate要求类型是 java.sql.Blob
+  private Blob photo=null;
+MyBatis要求是byte[]
+  private byte[] photo=null;
+因此与Spring MVC接收的文件类型不符，无法实现粗粒度接收。
+
+
+4.细粒度接收：
+通过单独接收上传文件：
+
+ public ResultMessage add(AreaModel am,
+@RequestPart(required=false) MultipartFile uploadphoto,
+HttpSession session) throws Exception
+
+5.接收处理：
+
+(1)保存到指定的目录中：
+if(!uploadphoto.isEmpty()){
+	String fileName=uploadphoto.getOriginalFilename();
+	String contentType=uploadphoto.getContentType();
+		   
+	uploadphoto.transferTo(new File(path));
+   
+}
+
+(2)保存到数据库表的图片字段中：
+if(!uploadphoto.isEmpty()){
+  String fileName=uploadphoto.getOriginalFilename();
+  String contentType=uploadphoto.getContentType();
+  ServletContext application=session.getServletContext();
+  //Set与图片对应的属性即可   
+  am.setPhoto(uploadphoto.getBytes());
+  am.setPhotoFileName(fileName);
+  am.setPhotoContentType(contentType);
+}
+  as.add(am); //增加Model对象，
+
+
+
+
+【】Spring MVC控制器方法参数
+Spring MVC Controller的方法支持多种类型参数，
+使得Spring MVC作为控制层框架比Struts2更灵活。
+
+1.Request or response objects (Servlet API).
+
+2.Session object (Servlet API): 会话对象
+
+
+3.org.springframework.web.context.request.WebRequest
+
+
+4.java.util.Locale：
+能取得客户端的Locale信息：语言和国家。
+
+5.java.util.TimeZone ：取得客户端的时区信息
+
+
+6.java.io.InputStream / java.io.Reader
+使用流方式取得客户提交的数据。
+
+
+7.java.io.OutputStream / java.io.Writer
+取得向客户端发送数据的输出流。
+
+
+8.org.springframework.http.HttpMethod
+用于取得客户的请求方式，
+
+9.java.security.Principal
+取得客户提交的验证信息。
+
+10.@PathVariable注释的参数。
+URI模板参数。
+为支持REST API设计的。
+
+11.使用@RequestParam注释的参数。
+
+
+12.使用@MatrixVariable注释的参数。
+
+
+13.使用@RequestHeader注释的参数。
+    (@RequestHeader long length)
+
+直接获得指定的请求头的值。
+14.使用 @RequestBody注释的参数。
+
+用于直接获得请求体数据，可用于获得直接使用XML或JSON传输的
+数据。
+Angluar， React框架直接传输JSON。
+
+
+15.@RequestPart注释的参数。
+
+用于接收文件上传
+
+
+16.@SessionAttribute注释的参数。
+  （@SessionAttribute String userid）
+  传统方式：
+  HttpSession session=....;
+  String userid=(Stirng)session.getAttribute("userid");
+
+17.@RequestAttribute注释的参数。
+（@RequestAttribute String userid）
+
+
+18.HttpEntity<?> 
+   同时获得请求头和请求体。
+
+
+19.java.util.Map / org.springframework.ui.Model
+   用于向View传输数据。
+
+20.org.springframework.web.servlet.mvc.support.RedirectAttributes
+   用于重定向传输数据。
+
+   return "redirect:/tomain.mvc";
+
+
+21.Command or form objects to bind request parameters 
+ ****  to bean properties 
+   最常用的参数类型，即Model对象，
+
+
+
+【】文件下载编程
+1.文件下载的方式
+(1)文件不保密，保存在WEB站点的普通目录下
+可直接下载或显示。
+ 可显示：
+  <img src="upload/文件名" />
+ 不能直接显示的文件：
+  <a href="upload/文件名">下载</> 
+
+(2)文件保密，保存在WEB站点的保护目录下或DB中
+或服务器的其他文件夹。
+  需要编程下载程序，将数据发送到浏览器客户端。
+
+
+2.Spring MVC编程下载的方式
+（1）使用传统的Servlet API实现。
+
+     response.setContentType(xxx);
+     OutputStream out=response.getOutputStream();
+     InputStream in=到文件或到DB文件字段的输入流；
+     将输入流的数据写到输出流。
+     in.close();
+     out.clsoe()     
+
+
+（2）使用Spring MVC模式：
+
+//下载文件的方法
+	@RequestMapping(value="/downphoto",method=RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadPhoto(@RequestParam int areaNo) throws Exception
+	{
+		AreaModel am=as.get(areaNo);
+		String fileName=new String(am.getPhotoFileName().getBytes("UTF-8"),"iso-8859-1");
+		String contentType=am.getPhotoContentType();
+		
+		
+		String mainType=contentType.substring(0,contentType.indexOf("/"));
+		
+		String subType=contentType.substring(contentType.indexOf("/")+1);
+	
+		
+		HttpHeaders headers=new HttpHeaders();
+		headers.setContentDispositionFormData("attachment", fileName);
+		headers.setContentType(new MediaType(mainType,subType));
+		return new ResponseEntity<byte[]>(am.getPhoto(),headers,HttpStatus.CREATED);
+		
+		
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+【】Spring MVC控制器方法的返回类型
+
+Spring MVC控制器方法支持多种类型的返回值，
+以适应不同的业务需求：
+Spring MVC控制器方法支持的返回类型有：
+1.
+
+2.
+
+
+3.
+
+
+4.
+
+
+5.
+
+
+6.
+
+
+7.
+
+
+8.
+
+
+9.
+
+【】
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,348 @@
+﻿----课程类型
+create table CourseType(
+ TYPENO number(10) primary key,
+TYPENAME varchar(40)
+);
+-- 课程类型
+create sequence SQ_CourseType nocache;
+
+-- 非教师人员表
+create table Nonteacher (
+NonteacherNO number(10) primary key,
+Code varchar(50),
+Name varchar(100),
+Sex varchar(100),
+Age  varchar(50),
+Job  varchar(50),
+Phone  varchar(50),
+HireDate date
+
+);
+
+-- 小区的序列
+create sequence SQ_Nonteacher nocache;
+
+
+
+-- 建筑类型
+create table BuildingType(
+ TYPENO number(10) primary key,
+TYPENAME varchar(40)
+);
+-- 建筑类型
+create sequence SQ_BuildingType nocache;
+
+-- 户型类型
+create table HouseType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+
+);
+create sequence SQ_HouseType nocache;
+
+
+-- 小区表
+create table Area (
+AREANO number(10) primary key,
+AREANAME varchar(50),
+AAddress varchar(100),
+Developer varchar(100),
+TotalBuidingArea number(10,2),
+TotalUseArea number(10,2),
+TotalPackArea number(10,2),
+TotalHome number(10),
+TotalHouse number(10),
+TotalPack number(10)
+
+);
+
+-- 小区的序列
+create sequence SQ_Area nocache;
+
+-- 楼宇表
+create table Building (
+BuildingNo number(10) primary key,
+AreaNo number(10) references Area(AREANO),
+BCODE varchar(20),
+BAddress varchar(100),
+BuildingTypeNo number(10) references BuildingType(TYPENO),
+Direction varchar(20),
+TotalHome number(10) default 0,
+TotalHouse number(10) default 0
+
+);
+
+-- 楼宇的序列
+create sequence SQ_Building nocache;
+
+
+-- 居住类型表
+create table LivingType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+
+);
+-- 居住类型
+create sequence SQ_LivingType nocache;
+
+-- 客户类型表
+create table CustomerType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+
+);
+create sequence SQ_CustomerType nocache;
+
+-- 维修类型表
+create table MaintainType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+
+);
+create sequence SQ_MaintainType nocache;
+
+-- 服务类型表
+create table ServiceType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+
+);
+create sequence SQ_ServiceType nocache;
+
+--房间表
+create table Room(
+ROOMNO number(10) primary key,
+HouseTypeNo number(10) references HouseType(TYPENO),
+BuildingNo number(10) references Building(BuildingNo),
+DepartmentCode varchar(20),
+Floor varchar(20),
+RoomCode varchar(20),
+BuildingArea number(10,2),
+FeeArea number(10,2),
+RoomStatus varchar(10),
+RoomType varchar(20)
+);
+create sequence SQ_Room nocache;
+
+--客户表
+create table Customer(
+CustomerNo number(10) primary key,
+TYPENO number(10) references CustomerType(TYPENO),
+CCODE varchar(20),
+CNAME varchar(20),
+Contact varchar(20),
+CardCode varchar(20),
+Mobile varchar(20),
+Tel varchar(20),
+Fax varchar(20),
+QQ varchar(20),
+WeiXin varchar(20),
+FeeStartDate date,
+FeeEndDate date,
+CStatua varchar(20)
+
+);
+create sequence SQ_Customer nocache;
+
+--客户与Room入住表
+create table CustomerHome(
+CHNO number(10) primary key,
+CustomerNo number(10) references Customer(CustomerNo),
+RoomNo number(10) references Room(RoomNO),
+LivingTypeNo number(10) references LivingType(TYPENO),
+ReceiveDate date, 
+LiveDate date,
+FeeStartDate date,
+FeeEndDate date,
+HumanCount number(4),
+CHStatus varchar(10) default 'Y'
+
+);
+
+create sequence SQ_CustomerHome nocache;
+
+--车位类型表
+create table ParkType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+);
+create sequence SQ_ParkType nocache;
+
+-- 车位表
+create table Park(
+ParkNO number(10) primary key,
+TypeNo number(10) references ParkType(TypeNo),
+ParkCode varchar(20),
+BuildingNo number(10) references Building(BuildingNo),
+Location varchar(100),
+Area number(10,2) default 0,
+ParkStatus varchar(10),
+Rentprice number(10,2) default 0,
+RentUnit varchar(50),
+FeeStatus varchar(10)
+);
+create sequence SQ_Park nocache;
+
+-- 客户与车位关联表
+create table ParkCustomer(
+PCNO number(10) primary key,
+ParkNo number(10) references Park(ParkNo),
+CustomerNo number(10) references Customer(CustomerNo),
+CarCode varchar(20),
+StartDate date,
+EndDate date,
+PCStatus varchar(10)
+);
+create sequence SQ_ParkCustomer nocache;
+
+
+
+
+--收费模块
+-- 收费类型表
+create table FeeType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+);
+create sequence SQ_FeeType nocache;
+
+-- 付款类型表
+create table PayType(
+ TYPENO number(10) primary key,
+ TYPENAME varchar(40)
+);
+create sequence SQ_PayType nocache;
+
+-- 收费项目表
+create table FeeItem(
+ItemNo number(10) primary key,
+ItemCode varchar(20),
+ItemName varchar(50),
+ItemUnit varchar(50),
+FeeTypeNo number(10) references FeeType(TYPENO),
+FeePayMethod varchar(20),
+FeeCycle varchar(10),
+ItemStatus varchar(20),
+ItemDesc varchar(200)
+
+);
+create sequence SQ_FeeItem nocache;
+
+-- 收费项目年度价格表
+create table FeeItemYearPrice(
+FeeYear varchar(4),
+ItemNo number(10) references FeeItem(ItemNo),
+Unitprice number(12,2) default 0,
+StartDate date,
+EndDtae date,
+PriceDesc varchar(500),
+primary key(FeeYear,ItemNo)
+);
+
+-- 房间缴费表
+create table RoomFee (
+RoomFeeNo number(10) primary key,
+FeeYEAR varchar(4),
+FeeMonth varchar(2),
+RoomNo number(10) references Room(RoomNo),
+FeeItemNo number(10),
+SPay number(12,2) default 0,
+APay number(12,2) default 0,
+Derate number(10,2) default 0,
+StartDate date,
+EndDate date,
+FeeStatus varchar(10),
+foreign key (FeeYEAR,FeeItemNo) references FeeItemYearPrice(FeeYEAR,ItemNo) 
+);
+create sequence SQ_RoomFee nocache;
+
+-- 车位缴费表
+create table ParkFee (
+ParkFeeNo number(10) primary key,
+FeeYEAR varchar(4),
+FeeMonth varchar(2),
+ParkNo number(10) references Park(ParkNo),
+FeeItemNo number(10),
+SPay number(12,2) default 0,
+APay number(12,2) default 0,
+Derate number(10,2) default 0,
+StartDate date,
+EndDate date,
+FeeStatus varchar(10),
+foreign key (FeeYEAR,FeeItemNo) references FeeItemYearPrice(FeeYEAR,ItemNo) 
+
+);
+create sequence SQ_RoomFee nocache;
+
+-- 房间收费付款记录表
+create table RoomFeePayRecord(
+PayNo number(10) primary key,
+RoomFeeNo number(10) references RoomFee(RoomFeeNo),
+PayTypeNo number(10) references PayType(TYPENO),
+PayAmount number(12,2) default 0,
+PayDate date,
+PayPerson varchar(20),
+Mobile varchar(20),
+InvoiceCode varchar(50),
+PayNoteCode varchar(50),
+PayDesc varchar(200)
+);
+create sequence SQ_RoomFeePayRecord nocache;
+
+-- 车位收费付款记录表
+create table ParkFeePayRecord(
+PayNo number(10) primary key,
+ParkFeeNo number(10) references ParkFee(ParkFeeNo),
+PayTypeNo number(10) references PayType(TYPENO),
+PayAmount number(12,2) default 0,
+PayDate date,
+PayPerson varchar(20),
+Mobile varchar(20),
+InvoiceCode varchar(50),
+PayNoteCode varchar(50),
+PayDesc varchar(200)
+);
+create sequence SQ_ParkFeePayRecord nocache;
+
+
+
+-- --------------系统安全维护模块-------------------------------
+--系统操作员表
+create table UserInfo(
+UUSERID varchar(20) primary key,
+UPASSWORD varchar(20),
+UNAME varchar(50),
+UserStatus varchar(1) default 'Y'
+);
+--操作员的附加信息表
+create table UserAddtionInfo (
+ UUSERID varchar(20) primary key referecnes UserInfo(UUSERID),
+ SEX varchar(2),
+ AGE number(2),
+ Mobible varchar(20)
+);
+
+-- 系统模块表
+create table SystemModule(
+ MNO number(10) primary key,
+ MNAME varchar(50)
+
+);
+
+-- 系统功能表
+create table SystemFunction(
+FUNNO number(10) primary key,
+MNO number(10) references SystemModule(MNO),
+FUNNAME varchar(100),
+FUNURL varchar(100),
+LevelNo number(2)
+);
+
+-- 系统功能与用户关联表
+create table SystemFunctionUser(
+UserID varchar(20) references UserInfo(UUSERID),
+FunNo number(10) references SystemFunction(FUNNO),
+primary key(USERID,FUNNO)
+
+
+);

@@ -1,0 +1,162 @@
+﻿第14讲 Web前端常用编程
+
+【】Bootstrap表单布局
+1. 创建垂直或基本表单
+
+<form role="form">
+<div class="form-group">
+<label for="name">名称</label>
+<input type="text" class="form-control" id="name"
+placeholder="请输入名称">
+</div>
+<div class="form-group">
+<label for="inputfile">文件输入</label>
+<input type="file" id="inputfile">
+<p class="help-block">这里是块级帮助文本的实例。</p>
+</div>
+<div class="checkbox">
+<label>
+<input type="checkbox"> 请打勾
+</label>
+</div>
+<button type="submit" class="btn btn-default">提交</button>
+</form>
+
+
+2.内联表单：
+内联表单中所有元素都向左对齐，标签并排，要创建内联表单，
+需要在form标签中加入class .form-inline
+
+<form class="form-inline" role="form">
+<div class="form-group">
+<label class="sr-only" for="name">名称</label>
+<input type="text" class="form-control" id="name"
+placeholder="请输入名称">
+</div>
+<div class="form-group">
+<label class="sr-only" for="inputfile">文件输入</label>
+<input type="file" id="inputfile">
+</div>
+<div class="checkbox">
+<label>
+<input type="checkbox"> 请打勾
+</label>
+</div>
+<button type="submit" class="btn btn-default">提交</button>
+</form>
+
+
+【】jqGrid动态参数更新
+
+$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+
+案例：
+
+	//更改小区选择事件
+	$("select#areaSelect").on("change",function(){
+		areaNo=parseInt($(this).val());
+		$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+		
+	});
+	//更改建筑类型选择事件
+	$("select#buildingTypeSelect").on("change",function(){
+		buildingTypeNo=parseInt($(this).val());
+		$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+		
+	});
+	
+	$("input[name='buildingcode']").on("blur",function(){
+		code=$("input[name='buildingcode']").val();
+		$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+	});
+
+
+
+
+
+【】下拉框的动态添加
+
+//取得小区列表，填充小区选择下拉框
+$.getJSON("area/list/all.mvc",function(data){
+		if(data!=null){
+			for(var i=0;i<data.length;i++){
+				$("select#areaSelect").append("<option value='"+data[i].no+"'>"+data[i].name+"</option>");
+			}
+		}
+});
+//取得建筑类型列表，填充建筑类型选择下拉框
+$.getJSON("buildingtype/list/all.mvc",function(data){
+		if(data!=null){
+			for(var i=0;i<data.length;i++){
+				$("select#buildingTypeSelect").append("<option value='"+data[i].no+"'>"+data[i].name+"</option>");
+			}
+		}
+});
+
+
+【】表单元素的事件
+1.文本框：click, change, focus, blue, keyin, keyup, keydown
+2.下拉框：click,change
+3.单选按钮，复选按钮：click，change
+
+案例：
+//更改小区选择事件
+$("select#areaSelect").on("change",function(){
+	areaNo=parseInt($(this).val());
+	$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+		
+});
+//更改建筑类型选择事件
+$("select#buildingTypeSelect").on("change",function(){
+	buildingTypeNo=parseInt($(this).val());
+	$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+	
+});
+
+$("input[name='buildingcode']").on("blur",function(){
+	code=$("input[name='buildingcode']").val();
+	$("#buildingGrid").jqGrid('setGridParam',{postData:{areaNo:areaNo,buildingTypeNo:buildingTypeNo,code:code}}).trigger("reloadGrid");
+});
+
+【】Tab实现
+1.Bootstrap Tab实现
+2.jquery UI Tab实现。
+3.其他jquery 插件
+
+【】Bootstrap Tab的实现
+
+1.Tab组成：
+
+<!-- 导航区 -->  
+  
+<ul class="nav nav-tabs" role="tablist">  
+  <li role="presentation" class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>  
+  <li role="presentation"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>  
+  <li role="presentation"><a href="#messages" role="tab" data-toggle="tab">Messages</a></li>  
+  <li role="presentation"><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>  
+</ul>  
+  
+<!-- 面板区 -->  
+<div class="tab-content">  
+  <div role="tabpanel" class="tab-pane active" id="home">...</div>  
+  <div role="tabpanel" class="tab-pane" id="profile">...</div>  
+  <div role="tabpanel" class="tab-pane" id="messages">...</div>  
+  <div role="tabpanel" class="tab-pane" id="settings">...</div>  
+</div> 
+
+2.Tab的切换
+(1) 手动切换：
+(2)编程自动切换：
+
+$('ul#myTab li a:last').tab('show');//显示最后一个tab  
+
+$('ul#myTab li a:first").tab('show');//初始化第一个tab  
+
+$('ul#myTab li a:eq(2)').tab('show');//显示第3个tab  
+
+【】
+
+
+
+
+

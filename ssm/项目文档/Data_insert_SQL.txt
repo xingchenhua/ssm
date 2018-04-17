@@ -1,0 +1,39 @@
+﻿
+--系统模块增加
+insert into SystemModule values(1,'基础信息维护');
+insert into SystemModule values(2,'物业收费');
+insert into SystemModule values(3,'售后服务');
+insert into SystemModule values(4,'安全维护');
+
+
+--系统功能增加
+
+insert into SystemFunction values (1,1,'建筑类型维护','buildingtype/main.html',1);
+insert into SystemFunction values (2,1,'居住类型维护','livingtype/main.html',1);
+insert into SystemFunction values (3,1,'房屋户型维护','housetype/main.html',1);
+insert into SystemFunction values (4,1,'客户类型维护','customertype/main.html',1);
+insert into SystemFunction values (5,1,'小区维护','area/main.html',1);
+insert into SystemFunction values (6,1,'楼宇维护','building/main.html',1);
+insert into SystemFunction values (14,1,'房间维护','room/main.html',1);
+
+
+insert into SystemFunction values (7,4,'操作员管理','user/main.html',9);
+insert into SystemFunction values (8,4,'模块维护','module/main.html',9);
+insert into SystemFunction values (9,4,'功能维护','function/main.html',9);
+
+
+insert into SystemFunction values (10,2,'收费类型维护','feetype/main.html',9);
+insert into SystemFunction values (11,2,'收费项目维护','feeitem/main.html',9);
+insert into SystemFunction values (12,2,'收费年度价格维护','feeyearprice/main.html',9);
+insert into SystemFunction values (13,2,'住户收费记录维护','fee/main.html',9);
+
+
+-- 增加一个初始的管理员账号，并授予操作员管理权限
+insert into UserInfo values ('cyh','cyh','陈裕华','男','Y');
+insert into SystemFunctionUser values ('cyh',7);
+
+
+
+
+
+

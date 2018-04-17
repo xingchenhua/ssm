@@ -1,0 +1,94 @@
+<script type="text/javascript" src="room/main.js"></script>
+
+<ul id="roomTab" class="nav nav-tabs">
+	<li class="active">
+	 <a href="#buildingList" data-toggle="tab">楼宇</a>
+	</li>
+	<li><a href="#roomList" data-toggle="tab">住宅管理</a></li>
+	
+	
+</ul>
+<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade in active" id="buildingList">
+		<form class="form-inline" role="form">
+		  <div class="form-group">
+		    <label  for="name">小区</label>
+		    <select id="areaSelect" class="form-control">
+		       <option value="0">所有小区</option>
+		    </select>
+		  </div>
+		  <div class="form-group">
+		    <label  for="name">建筑类型</label>
+		    <select id="buildingTypeSelect" class="form-control">
+		       <option value="0">所有建筑类型</option>
+		    </select>
+		  </div>
+		  <div class="form-group">
+		    <label  for="name">楼宇编码</label>
+		    <input type="text" class="form-control" name="buildingcode" size="5" />
+		  </div>
+		</form>
+		<table id="buildingGrid"></table>
+    	<div id="buildingGridPager"></div>
+    	
+	</div>
+	
+	<div class="tab-pane fade" id="roomList">
+		<div class="panel panel-default">
+		    <div class="panel-heading">
+		      <div class="row">
+			      <div class="col-md-6">房间管理</div>
+			      <div class="col-md-6 text-right"  >
+			        <a href="#" id="roomAddLink" class="btn btn-default">增加</a>
+			        <a href="#" id="roomModifyLink" class="btn btn-default">修改</a>
+			        <a href="#" id="roomDeleteLink" class="btn btn-default">删除</a>
+			        <a href="#" id="roomViewLink" class="btn btn-default">查看</a>
+			        <a href="#" id="roomImportLink" class="btn btn-default">导入房间</a>
+			      </div>
+		      </div>
+		    </div>
+		    <div class="panel-body">
+		        <form class="form-inline" role="form">
+				  <div class="form-group">
+				    <label  for="name">户型</label>
+				    <select id="" class="form-control">
+				       <option value="1">一室一厅</option>
+				       <option value="2">二室一厅</option>
+				    </select>
+				  </div>
+				  <div class="form-group">
+				    <label  for="name">单元</label>
+				    <input type="text" class="form-control" name="buildingcode" size="5" />
+				  </div>
+				  <div class="form-group">
+				    <label  for="name">楼层</label>
+				    <input type="text" class="form-control" name="buildingcode" size="5" />
+				  </div>
+				  <div class="form-group">
+				    <label  for="name">房间号</label>
+				    <input type="text" class="form-control" name="buildingcode" size="5" />
+				  </div>
+				  
+				</form>
+		        <table id="roomGrid"></table>
+    			<div id="roomGridPager"></div>
+		    </div>
+    
+		</div>
+		
+	</div>
+	
+</div>
+<!-- 显示弹出Modal -->
+<div class="modal" id="roomModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="modelbody">
+            </div>
+        </div>
+    </div>
+</div>

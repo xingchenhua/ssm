@@ -1,0 +1,36 @@
+<script type="text/javascript" src="nonteacher/main.js"></script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+	      <div class="col-md-4">职工信息维护</div>
+	      <div class="col-md-8 text-right"  >
+	        <a href="#" id="nonteacherAddLink" class="btn btn-default">增加</a>
+	        <a href="#" id="nonteacherModifyLink" class="btn btn-default">修改</a>
+	        <a href="#" id="nonteacherDeleteLink" class="btn btn-default">删除</a>
+	        <a href="#" id="nonteacherViewLink" class="btn btn-default">查看</a>
+	        <a href="#" id="nonteacherImportLink" class="btn btn-default">批量导入</a>
+	        <a href="#" id="nonteacherExportLink" class="btn btn-default">批量导出</a>
+	      </div>
+      </div>
+    </div>
+    <div class="panel-body">
+        <table id="nonteacherGrid"></table>
+    	<div id="nonteacherGridPager"></div>
+    </div>
+    
+</div>
+
+<div class="modal" id="nonteacherModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="modelbody">
+            
+            </div>
+        </div>
+    </div>
+</div>

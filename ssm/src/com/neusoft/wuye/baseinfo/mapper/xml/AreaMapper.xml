@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.IAreaMapper">
+
+	<resultMap id="AreaResultMap" type="Area" >
+		<id property="no" column="AREANO" />
+		<result property="name" column="AREANAME"/>
+		<result property="address" column="AAddress"/>
+		<result property="developer" column="Developer"/>
+		<result property="totalArea" column="TotalBuidingArea"/>
+		<result property="totalUseArea" column="TotalUseArea"/>
+		<result property="totalPackArea" column="TotalPackArea"/>
+		<result property="totalHome" column="TotalHome"/>
+		<result property="totalHouse" column="TotalHouse"/>
+		<result property="totalPack" column="TotalPack"/>
+		<result property="startDate" column="startDate"/>
+		
+		
+	</resultMap>
+	
+	<resultMap id="AreaWithPhotoResultMap" type="Area" extends="AreaResultMap" >
+	<result property="photo" column="photo"/>
+		<result property="photoFileName" column="photoFileName"/>
+		<result property="photoContentType" column="photoContentType"/>
+	</resultMap>
+	
+	<resultMap id="AreaWithCollectionResultMap" type="Area" extends="AreaResultMap" >
+		<!-- 内嵌式Select方式-->
+		<collection property="buildings" column="AREANO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByArea"></collection>
+		 <!-- 内嵌式ResutMap 
+		 <collection property="buildings" resultMap="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.BuildingResultMap">
+		 </collection>
+		 -->
+	</resultMap>
+	<!-- 同时取得小区附件和关联的楼宇集合 -->
+	<resultMap id="AreaWithPhotoAndCollectionResultMap" type="Area" extends="AreaWithPhotoResultMap">
+	  <collection property="buildings" column="AREANO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByArea"></collection>
+	</resultMap>
+	
+	
+	
+	<insert id="insert" parameterType="Area">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Area.nextval from dual
+		</selectKey>
+		INSERT INTO Area(AREANO,AREANAME,AAddress,Developer,TotalBuidingArea,TotalUseArea,TotalPackArea,TotalHome,TotalHouse,TotalPack,startDate) 
+		VALUES(#{no},#{name},#{address},#{developer},#{totalArea},#{totalUseArea},#{totalPackArea},#{totalHome},#{totalHouse},#{totalPack},#{startDate})
+	</insert>
+	
+	<insert id="insertWithPhoto" parameterType="Area">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Area.nextval from dual
+		</selectKey>
+		INSERT INTO Area(AREANO,AREANAME,AAddress,Developer,TotalBuidingArea,TotalUseArea,TotalPackArea,TotalHome,TotalHouse,TotalPack,startDate,photo,PHOTOFILENAME,PHOTOCONTENTTYPE) 
+		VALUES(#{no},#{name},#{address},#{developer},#{totalArea},#{totalUseArea},#{totalPackArea},#{totalHome},#{totalHouse},#{totalPack},#{startDate},#{photo},#{photoFileName},#{photoContentType})
+	</insert>
+	
+	
+	<update id="update" parameterType="Area">
+		update Area set AREANAME=#{name},AAddress=#{address},Developer=#{developer},
+		TotalBuidingArea=#{totalArea},TotalUseArea=#{totalUseArea},TotalPackArea=#{totalPackArea},
+		TotalHome=#{totalHome},TotalHouse=#{totalHouse},TotalPack=#{totalPack},startDate=#{startDate}
+		where AREANO=#{no}
+	</update>
+	
+	<update id="updateWithPhoto" parameterType="Area">
+		update Area set AREANAME=#{name},AAddress=#{address},Developer=#{developer},
+		TotalBuidingArea=#{totalArea},TotalUseArea=#{totalUseArea},TotalPackArea=#{totalPackArea},
+		TotalHome=#{totalHome},TotalHouse=#{totalHouse},TotalPack=#{totalPack},startDate=#{startDate},
+		Photo=#{photo},PHOTOFILENAME=#{photoFileName},PHOTOCONTENTTYPE=#{photoContentType}
+		where AREANO=#{no}
+	</update>
+	<!-- 删除小区的附件信息 -->
+	<update id="updateForDeletePhoto" parameterType="Area" >
+	   update Area set Photo=null,PHOTOFILENAME=null,PHOTOCONTENTTYPE=null
+	   where AREANO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Area">
+		delete from Area where AREANO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="AreaWithPhotoAndCollectionResultMap">
+		select * from Area where AREANO=#{areaNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="AreaResultMap">
+		select * from Area
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="AreaResultMap">
+		select * from Area
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(AREANO) from Area
+	</select>
+	
+	
+	
+
+
+</mapper>
+

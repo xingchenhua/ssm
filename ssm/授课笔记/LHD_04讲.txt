@@ -1,0 +1,130 @@
+﻿
+第04讲 MyBatis多对多和动态SQL
+
+【】MyBatis多对多映射
+1.Java Model类定义：
+双向多对多：用户Model与FunctionModel是双向多对多关联关系。
+
+@Alias("User")
+public class UserModel {
+	private String userid=null;
+	private String password=null;
+	private String name=null;
+	private String status=null; //操作是否允许登录状态
+	//用户拥有的功能集合
+	private List<FunctionModel> functions=null;
+}
+
+//系统功能Model类
+@Alias("Function")
+public class FunctionModel {
+	//功能序号
+	private int no=0;
+	//功能名称
+	private String name=null;
+	//功能地址
+	private String url=null;
+	//功能需要的级别
+	private int level=0;
+	//拥有此功能的用户列表
+	private List<UserModel> users=null;
+}
+
+2.Mapper XML定义
+数据库实现多对多使用一个关联表。
+关联表有2个字段，分别指向关联的2个表。
+这2个字段联合做主键，每个分别是外键。
+在MyBatis XML中使用<collection>映射对多的集合。
+<1><collection>内嵌式select方式
+在用户的Mapper映射文件映射代码：
+<resultMap id="UserCollectionResultMap" type="User" extends="UserResultMap">
+	<collection property="functions" column="UUSERID" select="com.neusoft.wuye.admin.mapper.IFunctionMapper.selectListByUser" ></collection>
+</resultMap>
+在功能Model类的Mapper映射XML文件中映射代码：
+
+<resultMap id="FunctionCollectionResultMap" type="Function" >
+		<collection property="users" column="FUNNO" select="com.neusoft.wuye.admin.mapper.IUserMapper.selectListByFunction"></collection>
+</resultMap>
+使用内嵌式select方式，不需要编写关联select语句。
+
+<2><collection>内嵌式resultMap方式
+
+在用户的Mapper XML中定义集合映射代码：
+
+<resultMap id="UserCollectionResultMap" type="User" extends="UserResultMap">
+	<collection property="functions" resultMap="com.neusoft.wuye.admin.mapper.IFunctionMapper.FunctionResultMap" ></collection>
+</resultMap>
+
+在功能的Mapper XML中定义集合映射代码：
+<resultMap id="FunctionCollectionResultMap" type="Function" >
+	<collection property="users" resultMap="com.neusoft.wuye.admin.mapper.IUserMapper.UserResultMap" ></collection>
+</resultMap>
+
+使用内嵌式ResultMap需要使用关联映射
+<select id="select">
+   select a.* from SystemFunction a inner join SystemFunctionUser b on a.FUNNO=b.FUNNO 
+   inner join SystemFunction c on c.funno=b.function
+   where b.USERID=#{userid} 
+</select>
+
+
+
+
+【】批处理实现
+使用MyBatis的<foreach>动态SQL机制。
+
+<foreach collection="listTag" index="index" item="tag" open="("
+    separator="," close=")">
+   #{tag} in n.tags
+  </foreach>
+
+
+【】MySQL批处理
+
+insert into Users values ('1','AA'),('2','BB'),('3','CC')
+
+【】Oracle批增加处理
+
+（1）
+insert into User values();
+(2)
+insert into User (字段列表) values(值);
+(3)
+insert into User (字段列表) 
+select (字段列表)
+from (
+   select ......
+   UNION ALL  
+   select ...
+    UNION ALL
+   select ...
+)
+
+【】MyBatis使用<foreach>实现批增加处理
+
+
+<insert id="grantFunctions">
+	INSERT INTO SystemFunctionUser
+	select USERID, FUNNO
+	from (
+	<foreach collection="functionNos" item="funno" separator="UNION ALL">
+		select #{userid} as USERID,#{funno} as FUNNO from dual 
+	</foreach>	
+	)
+</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

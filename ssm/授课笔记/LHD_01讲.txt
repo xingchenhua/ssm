@@ -1,0 +1,167 @@
+﻿
+【】JavaEE项目的结构
+结构：MVC
+1.View的职责：
+(1)收集用户的输入数据
+使用FORM表单和元素
+(2)显示系统的业务数据。
+<1>列表方式（分页）
+<2>详细方式
+
+2.Model职责
+(1)表达业务对象：使用属性。
+(2)持久化功能:CRUD
+(3)模拟实现系统的业务功能：
+
+3.Controller职责
+(1)取得View输入的数据
+(2)验证数据。
+(3)数据类型转换。
+(4)组装Model对象
+(5)调用Model的业务方法
+(6)传递业务数据给View对象。
+(7)导航到指定的View对象。
+
+【】JavaEE的5层架构
+1.Model层：实现业务数据表达，使用属性表达。
+DTO(Data Transfer Object):VO(Value Object)
+
+2.持久层(PO -Persistence Object)
+  DAO(Data Access Object)
+实现CRUD：Create, Retrive , Update, Delete
+
+
+3.业务层(服务层):（Service Object）
+实现每个业务方法。
+
+
+4.控制层(Controller Object -CO)
+
+
+
+5.表示层(View Object/User Interface Object)
+(VO/UIO)
+
+【】JavaEE的5层架构实现方式
+1.Model层：
+使用POJO(Plain Old Java Object):
+要符合JavaBean规范。
+(1)无参的Contructor.
+(2)定义私有的属性变量。
+(3)定义public的set/get方法。
+
+2.持久层
+(1)Hibernate
+(2)Mybatis(*)
+
+3.业务层:
+使用POJO类。
+
+4.控制层实现：
+(1) Servlet
+(2) Struts2 Action, Inteceptor,..
+(3) Spring MVC（*)
+
+5.View层实现：
+(1)传统模式：页面导航模式：服务器端生成模式。
+(2)SPA（Single Page Application）模式：
+   服务器负责接收和发送数据：JSON
+   服务器端与客户端关联的技术：REST API
+(3)实现技术：
+<1>jquery相关(*)：jQgrid, jquery form, 
+               jquery validation。
+<2>Google Angular 
+<3>Facebook React
+<4>Vue.js
+
+
+【】开发环境搭建
+1.安装Eclipse
+2.配置Tomcat7
+3.安装SVN Server（教师机）
+4.安装SVN Client for Eclipse
+5.安装Maven（项目的jar类库管理工具）
+(1)D:\tools\maven350
+(2)在上面的目录下创建类库保存目录：\javalib
+(3)COPY \conf\settings.xml到
+   D:\tools\maven350目录下。
+   更改文件名为：localsettings.xml
+(4)在localsettings.xml文件下，增加
+在<settings>下增加一行：
+
+<localRepository>D:\tools\maven350\javalib</localRepository>
+6.在Eclipse配置Maven
+（1）安装配置：installation setting
+（2）配置Maven的user setting
+
+7.在Eclipse下创建Maven项目
+（1）选择创建Maven Project
+（2）输入项目的信息：
+<1>group ID：表达项目开发的公司。
+    com.neusoft
+(2)Artifact ID: 表达项目
+    web01
+
+8.项目中引入需要的类库：
+（1）到Maven的仓库网站
+https://mvnrepository.com/
+(2)搜索需要的类库名称，
+找到项目的Maven依赖表达式：
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>4.3.10.RELEASE</version>
+</dependency>
+(3)在Maven项目的pom.xml文件中，在<dependencies>
+粘贴上面的依赖表达式。
+
+Maven自动从中央仓库下载对应的JAR文件到本地仓库。
+
+9.项目共享到SVN Server
+(1)SVN仓库的地址URL
+https://10.1.53.123/svn/t01
+https://10.1.53.123/svn/t02
+..
+https://10.1.53.123/svn/t16
+https://10.1.25.123/svn/t00
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

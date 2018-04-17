@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.admin.mapper.IFunctionMapper">
+
+	<resultMap id="FunctionResultMap" type="Function" >
+		<id property="no" column="FUNNO" />
+		<result property="name" column="FUNNAME"/>
+		<result property="url" column="FUNURL"/>
+		<result property="level" column="LEVELNO"/>
+	</resultMap>
+	
+	<resultMap  id="FunctionWithModuleResultMap" type="Function" extends="FunctionResultMap">
+		<association property="module" column="MNO" select="com.neusoft.wuye.admin.mapper.IModuleMapper.select"></association>
+	</resultMap>
+	
+	<resultMap id="FunctionCollectionResultMap" type="Function" extends="FunctionWithModuleResultMap" >
+		<collection property="users" column="FUNNO" select="com.neusoft.wuye.admin.mapper.IUserMapper.selectListByFunction"></collection>
+	</resultMap>
+		
+	<select id="select" parameterType="int" resultMap="FunctionResultMap">
+		select * from SystemFunction where FUNNO=#{functionNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="FunctionWithModuleResultMap">
+		select * from SystemFunction
+	</select>
+	<!--  -->	
+	<select id="selectListByUser" parameterType="string" resultMap="FunctionWithModuleResultMap">
+		select a.* from SystemFunction a inner join SystemFunctionUser b
+		on a.FUNNO=b.FUNNO where b.USERID=#{userid} 
+	</select>
+
+</mapper>
+

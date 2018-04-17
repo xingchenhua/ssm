@@ -1,0 +1,51 @@
+﻿第06讲 通过弹出窗口模式实现信息增加
+
+
+【】页面弹出窗口的实现方式
+1.JavaScript内置的函数：
+   window.openwindow("add.html")
+   window.alert()
+
+
+2. 使用jqueryUI的dialog控件
+
+<div id="dialog" title="Basic dialog">
+  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+
+$( function() {
+    $( "#dialog" ).dialog();
+  } );
+
+
+
+3.Bootstrap的modal模块
+(1)定义Modal区域
+<div class="modal fade" id="buildingTypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="modelbody">
+            <!-- 内容区域 -->
+            
+            </div>
+           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+(2)使用model函数，实现弹出框的显示和关闭
+显示弹出框：
+ $('#buildingTypeModal').modal("show");
+关闭弹出框：
+ $('#buildingTypeModal').modal("hide");
+
+
+
+
+
+
+

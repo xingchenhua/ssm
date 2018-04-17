@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.ICarMapper">
+	<!-- 楼宇基本信息映射 -->
+	<resultMap id="CarResultMap" type="Car" >
+		<id property="no" column="CarNo" />
+		<result property="code" column="BCODE"/>
+		<result property="address" column="BAddress"/>
+		<result property="direction" column="Direction"/>
+		<result property="totalHomes" column="TotalHome"/>
+		<result property="totoalHouses" column="TotalHouse"/>
+		
+	</resultMap>
+	<!-- 楼宇关联信息映射 -->
+	<resultMap id="CarAssociationResultMap" type="Car" extends="CarResultMap" >
+		<!-- 内嵌式Select方式 -->
+		<association property="area" column="AreaNo"  select="com.neusoft.wuye.baseinfo.mapper.IAreaMapper.select" ></association>
+		<association property="buildingType" column="BuildingTypeNo" select="com.neusoft.wuye.baseinfo.mapper.IBuildingTypeMapper.select"></association>
+		
+		<!-- 内嵌式ResultMap 
+		<association property="area" javaType="Area" resultMap="com.neusoft.wuye.baseinfo.mapper.IAreaMapper.AreaResultMap" />
+		<association property="buildingType" resultMap="com.neusoft.wuye.baseinfo.mapper.IBuildingTypeMapper.BuildingTypeResultMap"></association>
+		-->
+	</resultMap>
+	
+	<insert id="insert" parameterType="Car">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Car.nextval from dual
+		</selectKey>
+		INSERT INTO Car(CarNo,AreaNo,BCODE,BAddress,BuildingTypeNo,Direction) 
+		VALUES(#{no},#{area.no},#{code},#{address},#{buildingType.no},#{direction})
+	</insert>
+	
+	<update id="update" parameterType="Car">
+		update Car set AreaNo=#{area.no},BCODE=#{code},BAddress=#{address},
+		BuildingTypeNo=#{buildingType.no},Direction=#{direction}
+		where CarNo=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Car">
+		delete from Car where CarNo=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="CarAssociationResultMap">
+		select * from Car where CarNo=#{carNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="CarResultMap">
+		select * from Car
+	</select>
+	
+	<select id="selectListByCondition"  resultMap="CarResultMap">
+		select * from Car 
+		<where>
+		<if test="areaNo!=0">
+		   and AreaNo=#{areaNo}
+		</if>
+		<if test="buildingTypeNo!=0">
+		   and BuildingTypeNo=#{buildingTypeNo}
+		</if>
+		<if test="code!=null and code!=''">
+		   and BCODE like #{code}
+		</if>
+		</where>
+		
+	</select>
+	
+	
+	<select id="selectListByAllWithPage" resultMap="CarAssociationResultMap">
+		select a.*,b.*,c.* from Car a inner join Area b on a.areaNo=b.areano
+		inner join BuildingType c on a.BuildingTypeNo=c.TYPENO
+		
+	</select>
+	
+	
+	
+	<select id="selectListByConditionWithPage" resultMap="CarAssociationResultMap">
+		select * from Car
+		<where>
+		<if test="areaNo!=0">
+		   and AreaNo=#{areaNo}
+		</if>
+		<if test="buildingTypeNo!=0">
+		   and BuildingTypeNo=#{buildingTypeNo}
+		</if>
+		<if test="code!=null and code!=''">
+		   and BCODE like #{code}
+		</if>
+		</where>
+		
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(Car) from Car
+	</select>
+	
+	<select id="selectListByArea" parameterType="_int" resultMap="CarResultMap" >
+	  select * from Car where AREANO=#{areaNo}
+	</select>
+	
+	<select id="selectListByBuildingType" parameterType="_int" resultMap="CarResultMap">
+	 select * from Car where BuildingTypeNo=#{typeNo}
+	</select>
+	<!-- 按检索条件取得楼宇个数 -->
+	<select id="selectCountByCondition" resultType="_int">
+	    select count(*) from Car
+		<where>
+		<if test="areaNo!=0">
+		   and AreaNo=#{areaNo}
+		</if>
+		<if test="buildingTypeNo!=0">
+		   and BuildingTypeNo=#{buildingTypeNo}
+		</if>
+		<if test="code!=null and code!=''">
+		   and BCODE like #{code}
+		</if>
+		</where>
+		
+	</select>
+	
+	
+	
+
+
+</mapper>
+

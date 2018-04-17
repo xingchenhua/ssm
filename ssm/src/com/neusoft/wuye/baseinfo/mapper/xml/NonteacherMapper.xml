@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.INonteacherMapper">
+
+	<resultMap id="NonteacherResultMap" type="Nonteacher" >
+		<id property="no" column="NonteacherNO" />
+		<result property="code" column="Code"/>
+		<result property="name" column="Name"/>
+		<result property="sex" column="Sex"/>
+		<result property="age" column="Age"/>
+		<result property="job" column="Job"/>
+		<result property="phone" column="Phone"/>
+		<result property="hireDate" column="HireDate"/>
+		
+	</resultMap>
+	
+	<resultMap id="NonteacherWithPhotoResultMap" type="Nonteacher" extends="NonteacherResultMap" >
+	<result property="photo" column="photo"/>
+		<result property="photoFileName" column="photoFileName"/>
+		<result property="photoContentType" column="photoContentType"/>
+	</resultMap>
+	
+	<resultMap id="NonteacherWithCollectionResultMap" type="Nonteacher" extends="NonteacherResultMap" >
+		<!-- 内嵌式Select方式-->
+		<collection property="cars" column="NonteacherNO" select="com.neusoft.wuye.baseinfo.mapper.ICarMapper.selectListByNonteacher"></collection>
+		 
+	</resultMap>
+	<!-- 同时取得小区附件和关联的楼宇集合 -->
+	<resultMap id="NonteacherWithPhotoAndCollectionResultMap" type="Nonteacher" extends="NonteacherWithPhotoResultMap">
+	  <collection property="cars" column="AREANO" select="com.neusoft.wuye.baseinfo.mapper.ICarMapper.selectListByNonteacher"></collection>
+	</resultMap>
+	
+	
+	
+	<insert id="insert" parameterType="Nonteacher">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Nonteacher.nextval from dual
+		</selectKey>
+		INSERT INTO Nonteacher(NonteacherNO,Code,Name,Sex,Age,Job,Phone,HireDate) 
+		VALUES(#{no},#{code},#{name},#{sex},#{age},#{job},#{phone},#{hireDate})
+	</insert>
+	
+	<insert id="insertWithPhoto" parameterType="Nonteacher">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Nonteacher.nextval from dual
+		</selectKey>
+		INSERT INTO Nonteacher(NonteacherNO,Code,Name,Sex,Age,Job,Phone,HireDate,photo,PHOTOFILENAME,PHOTOCONTENTTYPE) 
+		VALUES(#{no},#{code},#{name},#{sex},#{age},#{job},#{phone},#{hireDate},#{photo},#{photoFileName},#{photoContentType})
+	</insert>
+	
+	
+	<update id="update" parameterType="Nonteacher">
+		update Nonteacher set Code=#{code},Name=#{name},Sex=#{sex},
+		Age=#{age},Job=#{job},Phone=#{phone},
+		HireDate=#{hireDate}
+		where NonteacherNO=#{no}
+	</update>
+	
+	<update id="updateWithPhoto" parameterType="Nonteacher">
+		update Nonteacher set Code=#{code},Name=#{name},Sex=#{sex},
+		Age=#{age},Job=#{job},Phone=#{phone},
+		HireDate=#{hireDate},
+		Photo=#{photo},PHOTOFILENAME=#{photoFileName},PHOTOCONTENTTYPE=#{photoContentType}
+		where NonteacherNO=#{no}
+	</update>
+	<!-- 删除小区的附件信息 -->
+	<update id="updateForDeletePhoto" parameterType="Nonteacher" >
+	   update Nonteacher set Photo=null,PHOTOFILENAME=null,PHOTOCONTENTTYPE=null
+	   where NonteacherNO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Nonteacher">
+		delete from Nonteacher where NonteacherNO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="NonteacherWithPhotoAndCollectionResultMap">
+		select * from Nonteacher where NonteacherNO=#{nonteacherNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="NonteacherResultMap">
+		select * from Nonteacher
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="NonteacherResultMap">
+		select * from Nonteacher
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(NonteacherNO) from Nonteacher
+	</select>
+	
+	
+	
+
+
+</mapper>
+

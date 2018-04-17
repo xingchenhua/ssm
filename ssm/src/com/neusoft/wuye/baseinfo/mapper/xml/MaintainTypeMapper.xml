@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.IMaintainTypeMapper">
+
+	<resultMap id="MaintainTypeResultMap" type="MaintainType" >
+		<id property="no" column="TYPENO" />
+		<result property="name" column="TYPENAME"/>
+	</resultMap>
+	
+		
+	<insert id="insert" parameterType="MaintainType">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_MaintainType.nextval from dual
+		</selectKey>
+		INSERT INTO MaintainType(TYPENO,TYPENAME) 
+		VALUES(#{no},#{name})
+	</insert>
+	
+	<update id="update" parameterType="MaintainType">
+		update MaintainType set TYPENAME=#{name}
+		where TYPENO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="MaintainType">
+		delete from MaintainType where TYPENO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="MaintainTypeResultMap">
+		select * from MaintainType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="MaintainTypeResultMap">
+		select * from MaintainType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="MaintainTypeResultMap">
+		select * from MaintainType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(TYPENO) from MaintainType
+	</select>
+
+</mapper>
+

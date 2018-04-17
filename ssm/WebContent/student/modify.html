@@ -1,0 +1,84 @@
+
+ <form id="areaModifyForm" role="form" class="form-horizontal" action="area/modify.mvc" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="areaname">学生姓名</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="name" id="areaname" />
+            </div>
+            <label class="col-sm-2 control-label" for="areaaddress">家庭地址</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="address" id="areaaddress" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="areadeveloper">联系人</label>
+            <div class="col-sm-4">
+                <input type="password" class="form-control" name="developer" id="areadeveloper" />
+            </div>
+            <label class="col-sm-2 control-label" for="totalArea">电话</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="totalArea" id="totalArea" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="totalUseArea"></label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="totalUseArea" id="totalUseArea" />
+            </div>
+            <label class="col-sm-2 control-label" for="totalPackArea">班级</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="totalPackArea" id="totalPackArea" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="totalHome">住宅个数</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="totalHome" id="totalHome" />
+            </div>
+            <label class="col-sm-2 control-label" for="totalHouse">公建个数</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="totalHouse" id="totalHouse" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="totalPack">停车位个数</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="totalPack" id="totalPack" />
+            </div>
+            <label class="col-sm-2 control-label" for="startDate">入学时间</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" name="startDate"  data-date-format="YYYY-MMMM-DD"  id="startDate" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="photo">学生照片</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="uploadphoto" id="photo" />
+            </div>
+            <label class="col-sm-2 control-label" for="startDate">附件修改选择</label>
+            <div class="col-sm-4">
+              	<label class="radio-inline">
+	                <input type="radio" name="photoOption"  value="change" checked>更换
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="photoOption"  value="keep">保留原附件
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="photoOption"  value="delete">删除原附件
+	            </label>
+            
+            </div>
+        </div>
+        <div class="form-group">
+        	<div class="col-sm-6">
+        	    <input type="hidden" name="no">
+                <input type="submit" class="form-control" value="提交" />
+            </div>
+            <div class="col-sm-6">
+                <input type="button" class="form-control" value="取消" />
+            </div>
+        </div> 
+         
+    </fieldset>
+</form>

@@ -1,0 +1,141 @@
+﻿第13讲 数据的导入和导出
+
+【】授课内容
+1.使用POI读取Excel文件，并导入到数据库中。
+2.使用POI生成Excel文件，将数据库的内容写到Excel中。
+
+【】Apache POI框架
+POI是操作Offce文件框架。
+
+【】POI框架引入
+1.下载POI软件。
+2.导入JAR文件。
+
+【】Excel文件组成
+1. WorkBook：表达一个Excel文件。
+
+2.Sheet：表达一个电子表。WorkBook包含多个Sheet。
+
+3.Row：表达一行。
+
+4.Cell：单元。存储数据的基本单位。
+
+
+【】POI操作Excel的常用方法
+1.POI提供的API分类：
+(1)HSSF:操作excel旧版格式文件的API， excel97版，文件扩展名
+是xls.
+
+(2)XSSF:操作新版的Excel APi，扩展名为:xlsx
+
+
+2.创建新的Excel文件：
+(1)创建xls格式的Excel
+    Workbook wb = new HSSFWorkbook();
+    FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+    wb.write(fileOut);
+    fileOut.close();
+(2)创建xlsx格式的Excel文件。
+    Workbook wb = new XSSFWorkbook();
+    FileOutputStream fileOut = new FileOutputStream("workbook.xlsx");
+    wb.write(fileOut);
+    fileOut.close();
+
+3.创建一个电子表格sheet
+
+Workbook wb = new HSSFWorkbook();  // or new XSSFWorkbook();
+Sheet sheet1 = wb.createSheet("new sheet");
+Sheet sheet2 = wb.createSheet("second sheet");
+
+4.创建行row
+ // Create a row and put some cells in it. Rows are 0 based.
+Row row = sheet.createRow((short)0);
+
+5.创建单元格cell
+
+Cell cell = row.createCell(0);
+
+6.在cell中写入数据：
+  cell.setCellValue(各种类型);
+  cell.setCellValue(1);
+
+
+7.将WorkBook写入到一个文件中：
+FileOutputStream fileOut = new FileOutputStream("d:/temp/d001.xlsx");
+wb.write(fileOut);
+fileOut.close();
+
+
+【】打开一个已经存在的Excel文件
+1.打开Excel文件：
+
+// Use a file
+Workbook wb = WorkbookFactory.create(new File("MyExcel.xls"));
+
+// Use an InputStream, needs more memory
+Workbook wb = WorkbookFactory.create(new FileInputStream("MyExcel.xlsx"));
+
+ // HSSFWorkbook, File
+  NPOIFSFileSystem fs = new NPOIFSFileSystem(new File("file.xls"));
+  HSSFWorkbook wb = new HSSFWorkbook(fs.getRoot(), true);
+  ....
+  fs.close();
+
+  // HSSFWorkbook, InputStream, needs more memory
+  NPOIFSFileSystem fs = new NPOIFSFileSystem(myInputStream);
+  HSSFWorkbook wb = new HSSFWorkbook(fs.getRoot(), true);
+
+  // XSSFWorkbook, File
+  OPCPackage pkg = OPCPackage.open(new File("file.xlsx"));
+  XSSFWorkbook wb = new XSSFWorkbook(pkg);
+  ....
+  pkg.close();
+
+  // XSSFWorkbook, InputStream, needs more memory
+  OPCPackage pkg = OPCPackage.open(myInputStream);
+  XSSFWorkbook wb = new XSSFWorkbook(pkg);
+  ....
+  pkg.close();
+
+
+2.取得指定的Sheet                  
+
+Sheet sheet=wb.getSheetAt(0);
+
+3.取得指定的行：
+Row row=sheet.getRow(0);
+
+4.遍历所有的行：
+for (Row row : sheet) {
+
+}
+
+5.取得指定的cell：
+Cell c0=row.getCell(0);
+
+6.遍历一行所有的cell
+for (Cell cell : row) {
+                // Do something here
+
+}
+
+7.取得Cell的数据
+(1)取得String数据
+String address=c1.getStringCellValue();
+(2)取得double或int的cell数据：
+double totalBuildingArea=c3.getNumericCellValue();
+int totalHome=(int)c6.getNumericCellValue();
+
+(3)取得日期类型的cell数据：
+Date creatDate=c9.getDateCellValue();
+
+
+8.关闭Workbook：
+wb.close();
+9.关闭输入流：
+excelFile.close();
+
+
+
+
+4.

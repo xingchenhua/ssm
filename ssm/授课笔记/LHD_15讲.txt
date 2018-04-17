@@ -1,0 +1,127 @@
+﻿第15讲 Spring MVC异常处理
+
+【】异常处理的方式
+1.分布式手动编程方式：
+
+try{
+   执行的处理代码
+}catch(Exception ){
+   异常处理代码
+
+}
+
+2.配置式异常处理方式：（声明式异常处理）集中式
+（1）Strut2提供了全局异常声明
+  <global-exception-mappings>
+     <exception-mapping exception="java.io.IOException" 
+                        result="io" />
+     <exception-mapping exception="java.sql.SQLException" 
+                        result="sql" />
+
+  </global-exception-mappings>
+ 
+(2)Spring MVC处理异常
+  使用注释控制器类完成
+
+
+【】Spring MVC处理异常方式
+1.通过XML配置方式
+使用HandlerExceptionResolver配置异常解析器。
+
+
+2.通过@ExceptionHandler注解方式
+
+
+  
+
+【】@ExceptionHandler注解方式实现异常处理
+
+1.处理单个Controller异常
+
+在Controller类内定义一个异常处理方法，方法使用
+@ExceptionHandler进行注释。
+能处理该控制器内所有方法的异常。
+
+
+@Controller
+public class SimpleController 
+{
+	// @RequestMapping methods omitted ...
+	@ExceptionHandler(IOException.class)
+	public ResponseEntity<String> handleIOException(IOException ex) {
+		// prepare responseEntity
+		return responseEntity;
+	}
+	@ExceptionHandler(SQLException.class)
+	public ResponseEntity<String> handleSQLException(IOException ex) {
+		// prepare responseEntity
+		return responseEntity;
+	}
+}
+
+案例：
+@ExceptionHandler(Exception.class)
+	public ResultMessage handleException(Exception ex) {
+		ResultMessage result=new ResultMessage();
+		//异常处理代码，存储或发生异常信息。QQ，Mail，微信。
+		//
+		result.setResult("N");
+		result.setMessage("操作员处理异常,异常原因:"+ex.getMessage());
+		return result;
+	}
+
+
+
+
+2.处理多个Controller异常（全局的异常处理）
+
+编写一个控制器类，使用@ControllerAdvice对类进行注释
+
+在类中定义@ExceptionHandler注释的方法
+
+
+
+案例：
+package com.neusoft.wuye.exception.controller;
+
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.neusoft.wuye.result.ResultMessage;
+
+//全局的异常处理控制器器
+@RestController
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+	@ExceptionHandler(Exception.class)
+	public ResultMessage handleException(Exception ex) {
+		ResultMessage result=new ResultMessage();
+		//异常处理代码，存储或发生异常信息。QQ，Mail，微信。
+		//
+		result.setResult("N");
+		result.setMessage("全局处理抛出异常,异常原因:"+ex.getMessage());
+		return result;
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+【】
+
+
+【】

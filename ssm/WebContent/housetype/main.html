@@ -1,0 +1,36 @@
+<script type="text/javascript" src="housetype/main.js"></script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+	      <div class="col-md-4">房间户型管理</div>
+	      <div class="col-md-8 text-right"  >
+	        <a href="#" id="houseTypeAddLink" class="btn btn-default">增加</a>
+	        <a href="#" id="houseTypeModifyLink" class="btn btn-default">修改</a>
+	        <a href="#" id="houseTypeDeleteLink" class="btn btn-default">删除</a>
+	        <a href="#" id="houseTypeViewLink" class="btn btn-default">查看</a>
+	        <a href="#" id="houseTypeImportLink" class="btn btn-default">导入户型</a>
+	        <a href="#" id="houseTypeExportLink" class="btn btn-default">导出户型</a>
+	      </div>
+      </div>
+    </div>
+    <div class="panel-body">
+        <table id="houseTypeGrid"></table>
+    	<div id="houseTypeGridPager"></div>
+    </div>
+    
+</div>
+
+<div class="modal" id="houseTypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="modelbody">
+            
+            </div>
+        </div>
+    </div>
+</div>

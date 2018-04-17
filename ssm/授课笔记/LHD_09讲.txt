@@ -1,0 +1,171 @@
+﻿第09讲 jqGrid框架的编程与应用
+
+【】jqGrid框架的功能
+
+jqGrid实现AJAX调用取得服务器返回列表数据，
+并进行分页显示的表格框。
+
+
+【】jqGrid框架的引入
+1.下载jqGrid发布软件包。
+2.COPY: css,js和plugin三个目录到项目的web目录中。
+3.在index.html中引入：
+
+<head>
+    <!-- The jQuery library is a prerequisite for all jqSuite products -->
+    <script type="text/ecmascript" src="../../../js/jquery.min.js"></script> 
+    <!-- We support more than 40 localizations -->
+    <script type="text/ecmascript" src="../../../js/trirand/i18n/grid.locale-en.js"></script>
+    <!-- This is the Javascript file of jqGrid -->   
+    <script type="text/ecmascript" src="../../../js/trirand/jquery.jqGrid.min.js"></script>
+    <!-- This is the localization file of the grid controlling messages, labels, etc.
+    <!-- A link to a jQuery UI ThemeRoller theme, more than 22 built-in and many more custom -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <!-- The link to the CSS that the grid needs -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../../css/trirand/ui.jqgrid-bootstrap.css" />
+	<script>
+		$.jgrid.defaults.width = 780;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <title>jqGrid Loading Data - JSON</title>
+</head>
+
+
+
+
+【】jqGrid的基本应用编程
+1.设置全局的显示样式：
+$.jgrid.defaults.styleUI = 'Bootstrap';
+
+2.在页面上设置jqgrid显示的表格
+<table id="jqGrid"></table>
+3.设置显示分页导航的区域：
+<div id="jqGridPager"></div>
+
+4.创建jqgrid对象，并设置相关的属性。
+
+$("#jqGrid").jqGrid({
+  属性名:值,
+  属性名:值,
+  ...
+  
+});
+
+案例：
+$("#jqGrid").jqGrid({
+		url: 'data.json',
+		datatype: "json",
+		 colModel: [
+			{ label: 'Category Name', name: 'CategoryName', width: 75 },
+			{ label: 'Product Name', name: 'ProductName', width: 90 },
+			{ label: 'Country', name: 'Country', width: 100 },
+			{ label: 'Price', name: 'Price', width: 80, sorttype: 'integer' },
+			// sorttype is used only if the data is loaded locally or loadonce is set to true
+			{ label: 'Quantity', name: 'Quantity', width: 80, sorttype: 'number' }                   
+		],
+		viewrecords: true, // show the current page, data rang and total records on the toolbar
+		width: 780,
+		height: 200,
+		rowNum: 30,
+		loadonce: true, // this is just for the demo
+		pager: "#jqGridPager"
+});
+
+
+5.对JSON数据进行解析的属性
+jsonReader :
+
+{
+
+root: "rows",  //数据模型
+
+page: "page",//数据页码
+
+total: "total",//数据总页码
+
+records: "records",//数据总记录数
+
+repeatitems: true,//如果设为false，则jqGrid在解析json时，会根据name(colmodel 指定的name)来搜索对应的数据元素（即可以json中元素可以不按顺序）
+
+cell: "cell",//root 中row 行
+
+id: "id",//唯一标识
+
+userdata: "userdata",
+
+subgrid: {
+
+root:"rows", repeatitems: true, cell:"cell"
+
+}
+
+
+【】jqgrid编程案例
+1.HTML页面：
+  <div class="panel-body">
+        <table id="areaGrid"></table>
+    	<div id="areaGridPager"></div>
+    </div>
+
+2.JS程序:
+
+$("#areaGrid").jqGrid({
+		url: 'area/list/page.mvc',
+		datatype: "json",
+		method:"GET",
+		colModel: [
+			{ label: '名称', name: 'name', width: 150 },
+			{ label: '地址', name: 'address', width: 200 },
+			{ label: '开发商', name: 'developer', width: 100 }
+		],
+		viewrecords: true, // show the current page, data rang and total records on the toolbar
+		width: 680,
+		height: 400,
+		rowNum: 10,
+		jsonReader:{
+			root:"list",
+			page:"page",
+			total:"pageCount",
+			records:"count",
+			id:"no"
+		},
+		pager: "#areaGridPager"
+});
+
+案例02：
+$("#areaGrid").jqGrid({
+		url: 'area/list/page.mvc',
+		datatype: "json",
+		method:"GET",
+		caption:"小区列表",
+		colModel: [
+			{ label: '名称', name: 'name', width: 150 },
+			{ label: '地址', name: 'address', width: 200 },
+			{ label: '开发商', name: 'developer', width: 100 }
+		],
+		viewrecords: true, // show the current page, data rang and total records on the toolbar
+		autowidth:true,
+		height: 370,
+		rowNum: 10,
+		jsonReader:{
+			root:"list",
+			page:"page",
+			total:"pageCount",
+			records:"count",
+			id:"no"
+		},
+		pager: "#areaGridPager"
+	});
+
+
+
+
+
+
+
+
+
+
+

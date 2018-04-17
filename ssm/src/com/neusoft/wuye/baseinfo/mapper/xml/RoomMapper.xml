@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.IRoomMapper">
+	<!-- 房间的简单属性映射 -->
+	<resultMap id="RoomResultMap" type="Room" >
+		<id property="no" column="ROOMNO" />
+		<result property="department" column="DepartmentCode"/>
+		<result property="floor" column="Floor"/>
+		<result property="code" column="RoomCode"/>
+				<result property="buildingArea" column="BuildingArea"/>
+		<result property="feeArea" column="FeeArea"/>
+		<result property="status" column="RoomStatus"/>
+		<result property="roomType" column="RoomType"/>
+
+	</resultMap>
+	<!-- 房间的关联属性映射 -->
+	<resultMap id="RoomWithAssociationResultMap" type="Room" extends="RoomResultMap" >
+		<association property="building" column="BuildingNo" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.select"></association>
+		<association property="houseType" column="HouseTypeNo" select="com.neusoft.wuye.baseinfo.mapper.IHouseTypeMapper.select"></association>
+		 
+	</resultMap>
+	
+	<insert id="insert" parameterType="Room">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_Area.nextval from dual
+		</selectKey>
+		INSERT INTO Area(AREANO,AREANAME,AAddress,Developer,TotalBuidingArea,TotalUseArea,TotalPackArea,TotalHome,TotalHouse,TotalPack) 
+		VALUES(#{no},#{name},#{address},#{developer},#{totalArea},#{totalUseArea},#{totalPackArea},#{totalHome},#{totalHouse},#{totalPack})
+	</insert>
+	
+	<update id="update" parameterType="Room">
+		update Area set AREANAME=#{name},AAddress=#{address},Developer=#{developer},
+		TotalBuidingArea=#{totalArea},TotalUseArea=#{totalUseArea},TotalPackArea=#{totalPackArea},
+		TotalHome=#{totalHome},TotalHouse=#{totalHouse},TotalPack=#{totalPack}
+		where AREANO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Room">
+		delete from Room where RoomNO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="RoomWithAssociationResultMap">
+		select * from Room where RoomNo=#{roomNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="RoomResultMap">
+		select * from Room
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="RoomResultMap">
+		select * from Room
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(AREANO) from Area
+	</select>
+	<!-- 根据检索条件取得Room列表，无分页 -->
+	<select id="selectListByCondition" resultMap="RoomResultMap">
+	
+	</select>
+	<!-- 根据检索条件取得Room列表，有分页 -->
+	<select id="selectListByConditionWithPage" resultMap="RoomWithAssociationResultMap">
+		select a.* from Room a inner join building b on a.BUILDINGNO=b.BUILDINGNO inner join Area c on b.areano=c.areaNo inner join buildingType d on b.BUILDINGTYPENO=d.TYPENO inner join HouseType e on a.HOUSETYPENO=e.TYPENO where 1=1 
+		<if test="areaNo!=0">
+		   and b.areaNo=#{areaNo}
+		</if>
+		<if test="buildingTypeNo!=0">
+		   and b.BUILDINGTYPENO=#{buildingTypeNo}
+		</if>
+		<if test="buildingNo!=0">
+		   and b.buildingNo=#{buildingNo}
+		</if>
+		<if test="houseTypeNo!=0">
+		   and a.HOUSETYPENO=#{houseTypeNo}
+		</if>
+		<if test="department!=null and department!=''">
+		   and a.department like #{department}
+		</if>
+		<if test="floor!=null and floor!=''">
+		   and a.Floor like #{floor}
+		</if>
+		<if test="code!=null and code!=''">
+		   and a.ROOMCODE like #{code}
+		</if>
+		
+	
+	</select>
+	<!-- 根据检索条件取得Room个数 -->
+	<select id="selectCountByCondition" resultType="_int">
+		select count(a.roomNo) from Room a inner join building b on a.BUILDINGNO=b.BUILDINGNO inner join Area c on b.areano=c.areaNo inner join buildingType d on b.BUILDINGTYPENO=d.TYPENO inner join HouseType e on a.HOUSETYPENO=e.TYPENO where 1=1 
+		<if test="areaNo!=0">
+		   and b.areaNo=#{areaNo}
+		</if>
+		<if test="buildingTypeNo!=0">
+		   and b.BUILDINGTYPENO=#{buildingTypeNo}
+		</if>
+		<if test="buildingNo!=0">
+		   and b.buildingNo=#{buildingNo}
+		</if>
+		<if test="houseTypeNo!=0">
+		   and a.HOUSETYPENO=#{houseTypeNo}
+		</if>
+		<if test="department!=null and department!=''">
+		   and a.department like #{department}
+		</if>
+		<if test="floor!=null and floor!=''">
+		   and a.Floor like #{floor}
+		</if>
+		<if test="code!=null and code!=''">
+		   and a.ROOMCODE like #{code}
+		</if>
+		
+	</select>
+	
+	
+	
+
+
+</mapper>
+

@@ -1,0 +1,277 @@
+﻿JavaEE项目实训 
+第05讲 Spring MVC基础
+
+【】Spring MVC概念
+Spring MVC是基于JavaEE的Web应用的VC层框架。
+
+View的职责：
+1.接收用户的输入：
+(1)HTML FORM及表单元素
+(2)Struts2的有专门的form元素。<s:xxx>
+(3)Spring MVC提供的专门的form元素。
+2.显示业务数据：
+(1)Struts2使用专门的标记：
+(2)Spring MVC使用JSTL。
+
+Controller的职责：
+1.接收View提交的数据
+(1)Struts2支持细粒度和粗粒度。
+(2)Spring MVC支持细粒度和粗粒度(Model对象).
+2.验证：
+（1）Struts2支持声明式验证：
+（2）Spring MVC支持声明式验证。
+3.类型转换
+都支持自动的类型转换。
+
+4.组装Model对象。
+都支持。
+5.调用Service层方法。
+6.传递业务数据给View层。
+(1)Struts2通过Action定义属性。
+(2)Spring MVC通过其Model对象。
+
+7.导航到指定的View对象
+(1)Struts2通过Result对象。
+(2)Spring MVC通过View Resovler实现。
+
+
+【】Spring MVC组成
+1.核心控制器：（Dispatcher Servlet）
+  接收所有的对MVC组件的请求。
+  解析请求中的数据组装Model对象，访问Sevlet API等。
+
+2.HandlerMapping：
+  RequestMapping请求映射对象：
+  完成请求地址URI与控制器的方法的对应映射。
+
+3.HandlerAdapter：
+  Controller对象（*）：
+  完成实际的控制器职责。
+4.View Resolver （视图解析器）
+  完成到各种View的跳转。
+
+5.HandlerExceptionResolver:异常处理解析器
+
+6.MultipartResolver：文件上传解析器。
+
+
+【】核心控制器：（Dispatcher Servlet）
+1.Spring MVC提供核心控制器，
+2.功能：
+（1）完成对请求处理的分派。
+(2) 根据处理结果调用不同的视图解析器。
+
+
+3.核心控制器的配置
+位置：web.xml
+配置代码：
+<web-app>
+  <servlet>
+	<servlet-name>mvc</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>mvc</servlet-name>
+	<url-pattern>*.mvc</url-pattern>
+   </servlet-mapping>
+
+
+</web-app>
+默认会自动查找/WEB-INF/[servlet-name]-servlet.mvc,
+按上面的配置文件是：mvc-servlet.mvc.
+
+可以通过设置Servlet的初始化参数：
+<init-param>
+<param-name>contextConfigLocation</param-name>
+<param-value>/WEB-INF/classles/mvccontext.xml</param-value>
+</init-param>
+或者通过classpath前缀：
+<init-param>
+<param-name>contextConfigLocation</param-name>
+<param-value>classpath:mvccontext.xml</param-value>
+</init-param>
+
+
+4.创建Spring MVC专门的配置文件
+位置：src目录下。
+文件名：mvccontext.xml
+文件头：与Spring的context.xml一样。
+
+
+6.启动Spring的IoC容器：
+Spring提供Web应用启动Spring IoC容器的接口和类：
+（1）接口：WebApplicationContext
+(2)实现类：使用监听器类完成。
+
+web.xml配置：
+配置Web级别的初始化参数，确定配置文件的位置。
+<context-param>
+<param-name>contextConfigLocation</param-name>
+<param-value>classpath:context.xml</param-value>
+</context-param>
+
+配置Web应用的启动Spring IOC容器的监听器：
+<listener>
+<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+
+
+【】Spring MVC控制器的编程
+Spring MVC使用POJO类即可当作Controller类。
+1.定义控制器class 
+
+2.使用@Controller对控制器类进行注释
+@Controller
+@RequestMapping(value="/buildingtype")
+public class BuildingTypeController {
+
+3.使用@RequestMapping映射请求地址
+
+
+4.编写控制方法
+@RequestMapping(value="/add")
+public String add(BuildingTypeModel btm) throws Exception
+{
+	bts.add(btm);
+	return "/buildingtype/main.html";
+}
+
+【】Spring MVC控制器主要的注解类@Controller
+
+【】Spring MVC控制器主要的注解类@RequestMapping
+1.功能：
+(1)配置请求地址，请求方式，请求的数据类型，响应的数据类型。
+(2)位置：类级别和方法级别
+
+2.语法：
+
+@RequestMapping(属性名=属性值,.....)
+
+常用的属性：
+(1) value={"uri","uri"} 指定URI地址。是默认属性。
+@RequestMapping("/modify")
+@RequestMapping(value="/modify")
+(2) method={请求方式} RequestMethod[]
+@RequestMapping(value="/add",method=RequestMethod.POST)
+public String add(BuildingTypeModel btm) throws Exception
+
+(3)path与value等价。
+
+(4)consumes={"","",""}
+指定控制器处理的请求类型。
+@RequestMapping(value="/modify"，
+  consumes={"application/json","text/plain"})
+
+(5)produces=String[]  produces={"","",""}
+指定能生成的响应类型。
+
+
+(6)headers=String[] 配置时：headers={"","",...}
+对请求中包含的请求头进行限定。
+
+@RequestMapping(value="/modify"，
+  consumes={"application/json","text/plain"},
+  headers="contentLength" )
+
+
+(7)params=String[] 配置语法：params={"","",...}
+
+@RequestMapping(value="/modify"，
+  consumes={"application/json","text/plain"},
+  headers="contentLength",params="userid" )
+
+【】@RequestParam
+1.功能：指定请求参数。
+2.位置：方法中参数前面。
+3.语法：@RequestParam(属性名=属性值,.....)
+4.主要的属性：
+(1)value="参数名"。 默认属性，可以省略。
+public BuildingTypeModel get(@RequestParam int typeNo) 
+
+
+public BuildingTypeModel get(@RequestParam(value="no") int typeNo) 
+
+(2)name: 与value属性相同。Alias for name()
+(3)required=true|false,默认值true
+public List<BuildingTypeModel> getListWithPage
+(@RequestParam(required=false,) int page) 
+(4)defaultValue="字符串"
+public List<BuildingTypeModel> getListWithPage
+(@RequestParam(required=false,defaultValue="1") int page) 
+
+【】@ResponseBody
+1.功能：指定控制器方法直接生成HTTP响应。
+2.位置：控制方法级别。
+
+
+@RequestMapping(value="/get",method=RequestMethod.GET,produces="application/json")
+@ResponseBody
+public BuildingTypeModel get(@RequestParam int typeNo) throws Exception
+{
+	return bts.get(typeNo);
+	
+}
+	
+@RequestMapping(value="/list/all",method=RequestMethod.GET,produces="application/json")
+@ResponseBody
+public List<BuildingTypeModel> getListByAll() throws Exception
+{
+	return bts.getListByAll();				
+}
+//取得建筑类型列表，分页模式	
+@RequestMapping(value="/list/page",method=RequestMethod.GET,produces="application/json")
+@ResponseBody
+public List<BuildingTypeModel> getListByAllWithPage(
+@RequestParam(required=false,defaultValue="10") int rows,
+@RequestParam(required=false,defaultValue="1")int page)
+ throws Exception
+{
+	return bts.getListByAllWithPage(rows, page);		
+}
+
+
+
+
+【】配置Spring MVC使用Jackson JSON解析器
+<!-- Jackson JSON结果解析器 -->
+<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+          <list>
+            <ref bean="jsonConverter"/>
+          </list>
+    </property>
+</bean>
+
+【】@RestController
+1.功能：指定REST API的控制类
+   @RestController=@Controller+@ResponseBody
+2.位置:控制器类的级别
+3.使用案例
+
+@RestController
+@RequestMapping(value="/buildingtype")
+public class BuildingTypeController {
+}
+
+使用@RestController
+需要在Spring MVC的配置文件中加入
+<!-- 启用MVC注释机制 -->
+<mvc:annotation-driven />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,77 @@
+﻿第11讲 数据验证
+
+【】数据验证类型
+1.按照验证实现的位置分：
+(1)服务器端验证：使用服务器实现语言。
+
+(2)客户端验证：在数据发送到服务器之前，使用客户端编程语言
+  完成数据验证。
+
+2.验证的内容区分：
+(1) 格式验证：与业务逻辑无关。
+  手机号码，Mail，身份证号码。
+
+(2)业务验证：与系统业务相关。
+  账号是否存在，
+
+3.实现验证的方式区分：
+(1) 编程式验证：
+
+(2)声明式验证：通过专门的框架使用XML，JSON格式进行
+配置式验证。不需要编写程序。
+
+
+【】jquery validate框架
+1.jquery validate框架是基于jquery的客户端的声明式的
+格式数据验证。
+
+2.jquery validate框架提供了内置的验证规则。
+  提供JSON配置实现数据的验证，自动显示验证失败信息。
+
+【】jquery validate框架引入
+1.下载文件
+
+https://github.com/jquery-validation/jquery-validation/releases/tag/1.17.0
+
+2.项目中引入框架的JS文件：先要引入jquery文件：
+<script src="../dist/jquery.validate.js"></script>
+<script src="../dist/additional-methods.js"></script>
+<script src="../dist/localization/messages_zh.js"></script>
+
+实际项目引入案例：
+<script src="otherplugin/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="otherplugin/jqueryvalidation/additional-methods.min.js"></script>
+<script src="otherplugin/jqueryvalidation/localization/messages_zh.min.js"></script>
+
+
+【】jquery validate框架内置的验证器规则：
+required – Makes the element required.
+remote – Requests a resource to check the element for validity.
+minlength – Makes the element require a given minimum length.
+maxlength – Makes the element require a given maximum length.
+rangelength – Makes the element require a given value range.
+min – Makes the element require a given minimum.
+max – Makes the element require a given maximum.
+range – Makes the element require a given value range.
+step – Makes the element require a given step.
+email – Makes the element require a valid email
+url – Makes the element require a valid url
+date – Makes the element require a date.
+dateISO – Makes the element require an ISO date.
+number – Makes the element require a decimal number.
+digits – Makes the element require digits only.
+equalTo – Requires the element to be the same as another one
+
+【】jquery validate框架的使用
+
+1.启动验证：
+$("#commentForm").validate({配置对象});
+
+
+
+
+
+
+
+
+

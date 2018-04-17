@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.ICustomerTypeMapper">
+
+	<resultMap id="CustomerTypeResultMap" type="CustomerType" >
+		<id property="no" column="TYPENO" />
+		<result property="name" column="TYPENAME"/>
+	</resultMap>
+	
+		
+	<insert id="insert" parameterType="CustomerType">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_CustomerType.nextval from dual
+		</selectKey>
+		INSERT INTO CustomerType(TYPENO,TYPENAME) 
+		VALUES(#{no},#{name})
+	</insert>
+	
+	<update id="update" parameterType="CustomerType">
+		update CustomerType set TYPENAME=#{name}
+		where TYPENO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="CustomerType">
+		delete from CustomerType where TYPENO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="CustomerTypeResultMap">
+		select * from CustomerType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="CustomerTypeResultMap">
+		select * from CustomerType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="CustomerTypeResultMap">
+		select * from CustomerType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(TYPENO) from BuildingType
+	</select>
+	
+	
+	
+
+
+</mapper>
+

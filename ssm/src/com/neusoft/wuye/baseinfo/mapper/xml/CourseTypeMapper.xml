@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.ICourseTypeMapper">
+
+	<resultMap id="CourseTypeResultMap" type="CourseType" >
+		<id property="no" column="TYPENO" />
+		<result property="name" column="TYPENAME"/>
+	</resultMap>
+	
+	<resultMap id="CourseTypeWithCollectionResultMap" type="CourseType" extends="CourseTypeResultMap" >
+		<collection property="buildings" column="TYPENO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByCourseType"></collection>
+	</resultMap>
+	
+	<insert id="insert" parameterType="CourseType">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_CourseType.nextval from dual
+		</selectKey>
+		INSERT INTO CourseType(TYPENO,TYPENAME) 
+		VALUES(#{no},#{name})
+	</insert>
+	
+	<update id="update" parameterType="CourseType">
+		update CourseType set TYPENAME=#{name}
+		where TYPENO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="CourseType">
+		delete from CourseType where TYPENO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="CourseTypeWithCollectionResultMap">
+		select * from CourseType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="CourseTypeResultMap">
+		select * from CourseType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="CourseTypeResultMap">
+		select * from CourseType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(TYPENO) from CourseType
+	</select>
+	
+	
+	
+
+
+</mapper>
+

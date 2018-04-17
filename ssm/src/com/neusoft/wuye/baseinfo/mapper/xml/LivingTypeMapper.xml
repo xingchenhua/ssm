@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.baseinfo.mapper.ILivingTypeMapper">
+
+	<resultMap id="LivingTypeResultMap" type="LivingType" >
+		<id property="no" column="TYPENO" />
+		<result property="name" column="TYPENAME"/>
+	</resultMap>
+	
+		
+	<insert id="insert" parameterType="LivingType">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SQ_LivingType.nextval from dual
+		</selectKey>
+		INSERT INTO LivingType(TYPENO,TYPENAME) 
+		VALUES(#{no},#{name})
+	</insert>
+	
+	<update id="update" parameterType="LivingType">
+		update LivingType set TYPENAME=#{name}
+		where TYPENO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="LivingType">
+		delete from LivingType where TYPENO=#{no}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="LivingTypeResultMap">
+		select * from LivingType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="LivingTypeResultMap">
+		select * from LivingType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="LivingTypeResultMap">
+		select * from LivingType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(TYPENO) from LivingType
+	</select>
+	
+	
+	
+
+
+</mapper>
+

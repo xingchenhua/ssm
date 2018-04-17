@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wuye.admin.mapper.IUserMapper">
+
+	<resultMap id="UserResultMap" type="User" >
+		<id property="userid" column="UUSERID" />
+		<result property="password" column="UPASSWORD"/>
+		<result property="name" column="UNAME"/>
+		<result property="sex" column="SEX"/>
+		<result property="status" column="UserStatus"/>
+	</resultMap>
+	
+	<resultMap id="UserCollectionResultMap" type="User" extends="UserResultMap">
+		<collection property="functions" column="UUSERID" select="com.neusoft.wuye.admin.mapper.IFunctionMapper.selectListByUser" ></collection>
+	</resultMap>
+	
+	<insert id="insert" parameterType="User">
+		INSERT INTO UserInfo(UUSERID,UPASSWORD,UNAME,SEX) 
+		VALUES(#{userid},#{password},#{name},#{sex})
+	</insert>
+	
+	<insert id="grantFunction">
+	INSERT INTO SystemFunctionUser values(#{userid},#{functionNo})
+	</insert>
+	
+	<insert id="grantFunctions">
+	INSERT INTO SystemFunctionUser
+	select USERID, FUNNO
+	from (
+	<foreach collection="functionNos" item="funno" separator="UNION ALL">
+		select #{userid} as USERID,#{funno} as FUNNO from dual 
+	</foreach>	
+	)
+	</insert>
+	
+	
+	<update id="update" parameterType="User">
+		update UserInfo set UPASSWORD=#{password},UNAME=#{name},UserStatus=#{status},SEX=#{sex}
+		where UUSERID=#{userid}
+	</update>
+	
+	<update id="updateForLoginStatus" parameterType="User">
+		update UserInfo set UserStatus=#{status}
+		where UUSERID=#{userid}
+	</update>
+	<!-- 只修改操作员的密码 -->
+	<update id="updateForPasswowrd" parameterType="User">
+	   update UserInfo set UPASSWORD=#{password}
+		where UUSERID=#{userid}
+	</update>
+	
+	<delete id="delete" parameterType="User">
+		delete from UserInfo where UUSERID=#{userid}
+	</delete>
+	
+	<delete id="revokeFunctions" parameterType="string">
+		delete from SystemFunctionUser where USERID=#{userid}
+	</delete>
+	
+	<select id="select" parameterType="string" resultMap="UserCollectionResultMap">
+		select * from UserInfo where UUSERID=#{userid}
+	</select>
+	
+	<select id="selectListByAll" resultMap="UserResultMap">
+		select * from UserInfo
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="UserResultMap">
+		select * from UserInfo
+	</select>
+	<select id="selectCountByAll" resultType="int">
+		select count(UUSERID) from UserInfo
+	</select>
+	
+	<select id="selectListByFunction" parameterType="_int" resultMap="UserResultMap">
+	   select a.* from UserInfo a inner join SystemFunctionUser b
+	   on a.USERID=b.USERID where b.FUNNO=#{functionNo}
+	</select>
+	
+</mapper>
+

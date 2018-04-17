@@ -1,0 +1,78 @@
+
+ <form id="nonteacherAddForm" role="form" class="form-horizontal" action="nonteacher/add.mvc" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="nonteachercode">编号</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="code" id="nonteachercode" />
+            </div>
+            <label class="col-sm-2 control-label" for="nonteachername">姓名</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="name" id="nonteachername" />
+            </div>
+        </div>
+        <div class="form-group">
+        	<label class="col-sm-2 control-label" for="sex">性别</label>
+        	<label class="col-sm-1">
+                <input type="radio" name="sex"  value="男" >男   
+                </label>         
+            <label class="col-sm-1">
+                <input type="radio" name="sex"  value="女">女                
+            </label>       	    
+            <label class="col-sm-4 control-label" for="age">年龄</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="age" id="age" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="job">岗位</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="job" id="job" />
+            </div>
+            <label class="col-sm-2 control-label" for="phone">电话</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="phone" id="phone" />
+            </div>
+        </div>
+        <div class="form-group">
+         <label class="col-sm-2 control-label" for="hireDate">入职时间</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" name="hireDate"  data-date-format="YYYY-MMMM-DD"  id="hireDate" />
+            </div>
+            <label class="col-sm-2 control-label" for="photo">职工照片</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="uploadphoto" id="photo" />
+            </div>
+            
+         <!-- z只是拿来当分割的 -->  
+        </div>
+        <div class="form-group">
+            
+            <label class="col-sm-2 control-label" for="hireDate"></label>
+            <div class="col-sm-4">            
+            </div>
+            <label class="col-sm-2 control-label" for="hireDate"></label>
+            <div class="col-sm-4">            
+            </div>            
+        </div>
+         <div class="form-group">
+            
+            <label class="col-sm-2 control-label" for="hireDate"></label>
+            <div class="col-sm-4">            
+            </div>
+            <label class="col-sm-2 control-label" for="hireDate"></label>
+            <div class="col-sm-4">            
+            </div>            
+        </div><!-- z只是拿来当分割的 -->
+        
+        <div class="form-group">
+        	<div class="col-sm-6">
+                <input type="submit" class="form-control" value="提交" />
+            </div>
+            <div class="col-sm-6">
+                <input type="button" class="form-control" value="取消" />
+            </div>
+        </div> 
+         
+    </fieldset>
+</form>
